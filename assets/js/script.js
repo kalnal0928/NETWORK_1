@@ -140,20 +140,51 @@ function startQuiz(chapter, type) {
     return true;
 }
 
+// 필터링 함수 수정
+function filterQuestions(selectedChapter, selectedType) {
+
+    // 모든 문제를 가져옴
+    let filtered = [...questions];
+
+    // 챕터 필터링 (항상 '네트워크'로 고정)
+    filtered = filtered.filter(q => q.chapter === selectedChapter);
+
+    // 유형 필터링
+    if (selectedType !== '선택하세요') {
+        filtered = filtered.filter(q => q.type === selectedType);
+    }
+
+    // 필터링된 문제가 있는지 확인
+    if (filtered.length === 0) {
+        showMessage('선택한 조건에 맞는 문제가 없습니다.', 'warning');
+        return false;
+    }
+
+    // Fisher-Yates 알고리즘을 사용하여 배열을 무작위로 섞기
+    for (let i = filtered.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+    }
+
+    // 필터링되고 섞인 문제 목록 저장
+    filteredQuestions = filtered;
+    return true;
+}
+
 // startQuiz 함수 수정
 function startQuiz(chapter, type) {
     // 필터링 실행
     if (!filterQuestions(chapter, type)) {
         return;
     }
-    
+
     // 퀴즈 시작 상태로 변경
     quizStarted = true;
-    
+
     // 선택 화면 숨기고 퀴즈 화면 표시
     selectionContainer.style.display = 'none';
     quizContainer.style.display = 'block';
-    
+
     // 첫 문제 표시
     currentQuestionIndex = 0;
     updateQuestionCounter();
