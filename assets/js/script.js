@@ -13,7 +13,7 @@ const selectionContainer = document.getElementById('selection-container'); // �
 const startButton = document.getElementById('start-button'); // 새로 추가
 const quizContainer = document.getElementById('quiz-container'); // 새로 추가
 const resetButton = document.getElementById('reset-button'); // 새로 추가
-const selectionChapterFilter = document.getElementById('selection-chapter-filter');
+
 const selectionTypeFilter = document.getElementById('selection-type-filter');
 
 // 상태 변수
@@ -45,15 +45,14 @@ function init() {
     // 시작 버튼 이벤트 리스너 추가
     startButton.addEventListener('click', () => {
         // 필터 값 검증
-        const selectedChapter = selectionChapterFilter.value;
         const selectedType = selectionTypeFilter.value;
         
-        if (selectedChapter === '선택하세요' || selectedType === '선택하세요') {
-            showMessage('출제 범위와 문제 유형을 모두 선택해주세요.', 'warning');
+        if (selectedType === '선택하세요') {
+            showMessage('문제 유형을 선택해주세요.', 'warning');
             return;
         }
         
-        startQuiz();
+        startQuiz('네트워크', selectedType);
     });
 }
 
@@ -64,52 +63,23 @@ function showSelectionScreen() {
 }
 
 // 필터링 함수 수정
-function filterQuestions() {
-    const selectedChapter = selectionChapterFilter.value;
-    const selectedType = selectionTypeFilter.value;
+function filterQuestions(selectedChapter, selectedType) {
     
     // 모든 문제를 가져옴
     let filtered = [...questions];
     
-    // 챕터 필터링
-    if (selectedChapter === '네트워크') {
-        filtered = filtered.filter(q => q.chapter === selectedChapter);
-    } else {
-        // '선택하세요'가 아닌 다른 값이 선택된 경우 (예: 'all'이 제거되었으므로)
-        // 모든 문제를 포함하거나, 특정 챕터만 포함하도록 로직을 조정할 수 있습니다.
-        // 여기서는 '네트워크' 챕터만 허용하므로, 다른 선택은 무시하거나 오류 처리할 수 있습니다.
-        // 현재는 '네트워크'가 아니면 필터링되지 않으므로, 이 부분은 그대로 둡니다.
-    }
+    // 챕터 필터링 (항상 '네트워크'로 고정)
+    filtered = filtered.filter(q => q.chapter === selectedChapter);
     
     // 유형 필터링
-    if (selectedType === 'multiple-choice' || selectedType === 'essay') {
+    if (selectedType !== '선택하세요') {
         filtered = filtered.filter(q => q.type === selectedType);
-    } else {
-        // '선택하세요'가 아닌 다른 값이 선택된 경우 (예: 'all'이 제거되었으므로)
-        // 'multiple-choice' 또는 'essay'가 아니면 필터링되지 않으므로, 이 부분은 그대로 둡니다.
     }
-    
-    // 필터링된 문제가 있는지 확인
-    if (filtered.length === 0) {
-        showMessage('선택한 조건에 맞는 문제가 없습니다.', 'warning');
-        return false;
-    }
-    
-    // Fisher-Yates 알고리즘을 사용하여 배열을 무작위로 섞기
-    for (let i = filtered.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
-    }
-    
-    // 필터링되고 섞인 문제 목록 저장
-    filteredQuestions = filtered;
-    return true;
-}
 
 // startQuiz 함수 수정
-function startQuiz() {
+function startQuiz(chapter, type) {
     // 필터링 실행
-    if (!filterQuestions()) {
+    if (!filterQuestions(chapter, type)) {
         return;
     }
     
@@ -505,12 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
     init();
     
     // 필터 변경 이벤트 리스너
-    if (selectionChapterFilter) {
-        selectionChapterFilter.addEventListener('change', () => {
-            // 필터가 변경될 때마다 문제 수 업데이트
-            filterQuestions();
-        });
-    }
+    
     
     if (selectionTypeFilter) {
         selectionTypeFilter.addEventListener('change', () => {
@@ -541,7 +506,7 @@ function resetQuiz() {
     resetQuestionStates();  // 문제 상태 초기화 함수 사용
     
     // 필터 초기화
-    selectionChapterFilter.value = '선택하세요';
+    
     selectionTypeFilter.value = '선택하세요';
     
     // 선택 화면으로 돌아가기
