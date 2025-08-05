@@ -447,6 +447,29 @@ footer {
 
 @media (max-width: 600px) {
     .controls {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .controls button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    #prev-button {
+        grid-column: 1 / 2;
+    }
+
+    #next-button {
+        grid-column: 2 / 3;
+    }
+
+    #submit-button,
+    #show-answer-button,
+    #reset-button {
+        grid-column: 1 / 3; 
     }
 }
