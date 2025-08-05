@@ -26,8 +26,9 @@ let isAnswerSubmitted = false; // 답안 제출 상태 추가
 let isMultipleChoiceAnswered = false; // 객관식 답변 상태 추가
 let isEssayAnswerShown = false; // 서술형 정답 표시 상태 추가
 
-// 초기화 함수 수정
-function init() {
+document.addEventListener('DOMContentLoaded', function() {
+    const selectionTypeFilter = document.getElementById('selection-type-filter');
+
     incorrectQuestions = [];
     isReviewMode = false;
     quizStarted = false;
@@ -44,7 +45,7 @@ function init() {
     
     // 시작 버튼 이벤트 리스너 추가
     startButton.addEventListener('click', () => {
-        const selectedType = document.getElementById('selection-type-filter').value;
+        const selectedType = selectionTypeFilter.value;
         
         if (selectedType === '선택하세요') {
             showMessage('문제 유형을 선택해주세요.', 'warning');
@@ -53,7 +54,14 @@ function init() {
         
         startQuiz('네트워크', selectedType);
     });
-}
+    
+    if (selectionTypeFilter) {
+        selectionTypeFilter.addEventListener('change', () => {
+            // 필터가 변경될 때마다 문제 수 업데이트
+            filterQuestions('네트워크', selectionTypeFilter.value);
+        });
+    }
+});
 
 // 선택 화면 표시 함수 (신규)
 function showSelectionScreen() {
