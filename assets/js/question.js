@@ -134,7 +134,7 @@ const questions = [
         question: "다음 중 유선 전송 매체의 종류로 잘못된 것은?",
         options: [
             "광섬유케이블",
-            "라디오파",
+            "라디오파", 
             "꼬임선",
             "동축케이블"
         ],
@@ -359,5 +359,6 @@ const questions = [
         chapter: "네트워크",
         type: "essay"
     }
+    
 ];
 export default questions;

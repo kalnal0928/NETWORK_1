@@ -26,7 +26,22 @@ let isEssayAnswerShown = false; // 서술형 정답 표시 상태 추가
 
 document.addEventListener('DOMContentLoaded', function() {
     const selectionTypeFilter = document.getElementById('selection-type-filter');
-
+    
+    // 주관식 옵션 추가 (기존 옵션이 있다면 그 뒤에 추가)
+    if (selectionTypeFilter) {
+        // 기존 옵션 확인
+        const hasEssayOption = Array.from(selectionTypeFilter.options)
+            .some(option => option.value === 'essay');
+        
+        // 주관식 옵션이 없으면 추가
+        if (!hasEssayOption) {
+            const essayOption = document.createElement('option');
+            essayOption.value = 'essay';
+            essayOption.textContent = '주관식';
+            selectionTypeFilter.appendChild(essayOption);
+        }
+    }
+    
     incorrectQuestions = [];
     isReviewMode = false;
     quizStarted = false;
@@ -316,23 +331,32 @@ function displayMultipleChoiceQuestion(question) {
     questionContainer.appendChild(multipleChoiceSubmitButton);
 }
 
-// 서술형 문제 표시 함수
+// 서술형 문제 표시 함수 개선
 function displayEssayQuestion(question) {
     console.log('서술형 문제 표시');
     
     const answerContainer = document.createElement('div');
     answerContainer.className = 'answer-container';
     
+    // 문제 설명 추가 (선택적)
+    const questionDescription = document.createElement('div');
+    questionDescription.className = 'question-description';
+    questionDescription.textContent = '아래 텍스트 영역에 답변을 작성하세요. Enter 키를 눌러 제출할 수 있습니다.';
+    answerContainer.appendChild(questionDescription);
+    
     const textarea = document.createElement('textarea');
     textarea.className = 'essay-answer';
     textarea.placeholder = '답변을 입력하세요. (Enter 키를 눌러 제출)';
-    textarea.rows = 5;
+    textarea.rows = 8; // 행 수 증가
     
     // 텍스트 영역에 키 이벤트 리스너 추가
     textarea.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault(); // 기본 줄바꿈 방지
             handleSubmit(); // 제출 함수 호출
+        } else if (e.key === 'Enter' && e.shiftKey) {
+            // Shift+Enter는 줄바꿈 허용 (기본 동작 유지)
+            console.log('줄바꿈 입력');
         }
     });
     
@@ -378,7 +402,7 @@ function displayResult(isCorrect, userAnswer, correctAnswer) {
     updateButtonStates();
 }
 
-// 정답 표시 함수
+// 정답 표시 함수 개선
 function showAnswer() {
     if (isEssayAnswerShown) return;
     
@@ -389,7 +413,14 @@ function showAnswer() {
         
         const answerReveal = document.createElement('div');
         answerReveal.className = 'answer-reveal';
-        answerReveal.innerHTML = `<h3>정답</h3><p>${currentQuestion.answer}</p>`;
+        
+        // 마크다운 형식의 정답을 HTML로 변환하여 표시
+        const formattedAnswer = currentQuestion.answer
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') // 굵은 글씨 처리
+            .replace(/\n\n/g, '</p><p>') // 문단 구분
+            .replace(/\n/g, '<br>'); // 줄바꿈 처리
+        
+        answerReveal.innerHTML = `<h3>정답</h3><div class="answer-content"><p>${formattedAnswer}</p></div>`;
         
         resultContainer.appendChild(answerReveal);
         isEssayAnswerShown = true;

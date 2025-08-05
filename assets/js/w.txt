@@ -1,0 +1,142 @@
+네트워크를 통해 데이터를 전송할 때 데이터가 전송되는 기본단위는?
+동기식전송과 비동기식전송의 차이점을 설명하시오.
+회선교환, 패킷교환, 메시지교환에 대해 특징을 중심으로 비교 설명하시오.
+OSI7 계층이 무엇이고 왜 필요한지 설명하시오.
+1바이트통신이다. 문자A를보내고자한다. 맨앞1비트를 홀수 패리티비트로 사용하고 생성다항식 G(x)=x4+x3+x2+1을 사용할 때 송신지에서 보내는 데이터 비트열은? (단, A는 10진수로 65)
+
+
+1. 네트워크 데이터 전송의 기본단위
+네트워크를 통해 데이터를 전송할 때 데이터가 전송되는 기본단위는 **패킷(Packet)**입니다. 패킷은 헤더와 데이터 부분으로 구성되며, 목적지 주소, 출발지 주소, 순서 정보 등을 포함합니다.
+2. 동기식 전송과 비동기식 전송의 차이점
+동기식 전송 (Synchronous Transmission):
+
+송신자와 수신자가 공통의 클럭 신호로 동기화
+연속적인 데이터 블록을 전송
+별도의 시작/정지 비트가 불필요
+높은 전송 효율성
+고속 전송에 적합
+
+비동기식 전송 (Asynchronous Transmission):
+
+각 문자마다 시작 비트와 정지 비트 사용
+문자 단위로 독립적 전송
+송수신자 간 엄격한 동기화 불필요
+상대적으로 낮은 전송 효율성
+저속 전송에 적합
+
+3. 회선교환, 패킷교환, 메시지교환 비교
+회선교환 (Circuit Switching):
+
+통신 시작 전 전용 물리적 경로 설정
+전송 지연 최소화
+대역폭 낭비 가능성
+음성 통신에 적합
+
+패킷교환 (Packet Switching):
+
+데이터를 패킷 단위로 분할하여 전송
+네트워크 자원의 효율적 활용
+경로별 독립적 전송 가능
+인터넷의 기본 방식
+
+메시지교환 (Message Switching):
+
+메시지 전체를 저장 후 전달 (Store-and-Forward)
+중간 노드에서 메시지 저장
+실시간성 부족
+현재는 거의 사용되지 않음
+
+4. OSI 7계층의 정의와 필요성
+OSI 7계층은 네트워크 통신을 7개의 논리적 계층으로 나눈 국제 표준 모델입니다.
+7개 계층:
+
+물리계층 (Physical)
+데이터링크계층 (Data Link)
+네트워크계층 (Network)
+전송계층 (Transport)
+세션계층 (Session)
+표현계층 (Presentation)
+응용계층 (Application)
+
+필요한 이유:
+
+복잡한 네트워크 기능을 단계별로 분리하여 관리 용이성 제공
+각 계층의 독립적 개발과 수정 가능
+서로 다른 시스템 간의 상호 운용성 보장
+표준화를 통한 호환성 확보
+문제 발생 시 해당 계층에서 해결 가능
+
+5. 데이터 비트열 계산
+문자 A(10진수 65)의 경우:
+
+A = 65 (10진수) = 01000001 (2진수, 8비트)
+
+단계별 계산:
+
+홀수 패리티 비트 계산:
+
+01000001에서 1의 개수: 2개 (짝수)
+홀수 패리티를 위해 패리티 비트 = 1
+패리티 포함: 101000001 (9비트)
+
+
+CRC 계산 (G(x) = x⁴+x³+x²+1):
+
+G(x) = x⁴+x³+x²+1 → 11101 (2진수)
+데이터: 101000001
+CRC를 위해 4개의 0을 뒤에 추가: 1010000010000
+1010000010000 ÷ 11101로 나눈 나머지 계산
+
+
+분석된 데이터분석 보기javascript// CRC 계산을 위한 이진 나눗셈
+function binaryDivision(dividend, divisor) {
+    let result = dividend;
+    let divisorLength = divisor.length;
+    
+    console.log(`데이터: ${dividend}`);
+    console.log(`생성다항식: ${divisor}`);
+    
+    for (let i = 0; i <= result.length - divisorLength; i++) {
+        if (result[i] === '1') {
+            // XOR 연산
+            for (let j = 0; j < divisorLength; j++) {
+                result = result.substring(0, i + j) + 
+                        (parseInt(result[i + j]) ^ parseInt(divisor[j])) + 
+                        result.substring(i + j + 1);
+            }
+        }
+    }
+    
+    // 나머지 추출 (마지막 4비트)
+    let remainder = result.slice(-4);
+    console.log(`나머지 (CRC): ${remainder}`);
+    return remainder;
+}
+
+// 데이터 설정
+let data = "101000001";  // 패리티 비트 포함된 데이터
+let dataWithZeros = data + "0000";  // CRC 계산을 위해 0000 추가
+let generator = "11101";  // G(x) = x^4 + x^3 + x^2 + 1
+
+// CRC 계산
+let crc = binaryDivision(dataWithZeros, generator);
+
+// 최종 전송 데이터
+let finalData = data + crc;
+console.log(`\n최종 송신 데이터: ${finalData}`);
+console.log(`길이: ${finalData.length} 비트`);
+출력Result
+
+데이터: 1010000010000
+생성다항식: 11101
+나머지 (CRC): 0010
+
+최종 송신 데이터: 1010000010010
+길이: 13 비트따라서 송신지에서 보내는 데이터 비트열은: 1010000010010
+구성:
+
+첫 번째 비트 (1): 홀수 패리티 비트
+다음 8비트 (01000001): 문자 A의 ASCII 코드
+마지막 4비트 (0010): CRC 검사 비트
+
+총 13비트의 데이터가 전송됩니다.
