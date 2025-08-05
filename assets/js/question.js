@@ -86,7 +86,7 @@ const questions = [
             "LAN은 연결하는 거리가 짧은 만큼 WAN보다 신호가 약해지거나 오류가 발생할 확률이 높다.",
             "유선 케이블, 적외선 링크, 무선 송수신기 등을 이용하여 통신한다."
         ],
-        answer: "LAN은 연결하는 거리가 짧은 만큼 WAN보다 신호가 약해지거나 오류가 발생할 확률이 높다.",
+        answer: "ISP가 제공하는 서비스를 사용하여 구축된 네트워크이다.",
         chapter: "네트워크",
         type: "multiple-choice"
     },
@@ -164,7 +164,7 @@ const questions = [
             "VLF",
             "VHF"
         ],
-        answer: "VHF",
+        answer: "SHF",
         chapter: "네트워크",
         type: "multiple-choice"
     },
