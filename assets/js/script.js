@@ -120,10 +120,6 @@ function startQuiz(chapter, type) {
     displayQuestion();
 }
 
-// 여기서 두 번째 filterQuestions 함수 선언을 제거하세요
-// 아래 코드를 삭제하세요:
-// function filterQuestions(selectedChapter, selectedType) { ... }
-
 // 문제 표시
 function displayQuestion() {
     if (filteredQuestions.length === 0) return;
