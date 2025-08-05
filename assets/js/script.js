@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // 엔터키 처리
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault(); // 기본 동작 방지 (폼 제출 등)
             console.log('엔터키 입력 감지');
             
@@ -122,17 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 아직 정답을 표시하지 않았으면 정답 표시
                 else {
                     console.log('정답 표시');
-                    // 텍스트 영역이 있으면 비활성화
-                    const textarea = document.querySelector('.essay-answer');
-                    if (textarea) {
-                        textarea.disabled = true;
-                    }
-                    // 정답 표시
-                    showAnswer();
-                    // 상태 업데이트
-                    isEssayAnswerShown = true;
-                    isAnswerSubmitted = true;
-                    updateButtonStates();
+                    handleSubmit();
                 }
             }
             // 이미 답변이 제출된 객관식 문제인 경우 다음 문제로 이동
@@ -378,17 +368,6 @@ function displayEssayQuestion(question) {
     textarea.className = 'essay-answer';
     textarea.placeholder = '답변을 입력하세요. (Enter 키를 눌러 제출)';
     textarea.rows = 8; // 행 수 증가
-    
-    // 텍스트 영역에 키 이벤트 리스너 추가
-    textarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault(); // 기본 줄바꿈 방지
-            handleSubmit(); // 제출 함수 호출
-        } else if (e.key === 'Enter' && e.shiftKey) {
-            // Shift+Enter는 줄바꿈 허용 (기본 동작 유지)
-            console.log('줄바꿈 입력');
-        }
-    });
     
     answerContainer.appendChild(textarea);
     questionContainer.appendChild(answerContainer);
