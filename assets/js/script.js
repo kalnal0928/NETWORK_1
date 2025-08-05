@@ -121,24 +121,7 @@ function startQuiz(chapter, type) {
 }
 
 // startQuiz 함수 수정
-}
-    
-    // 필터링된 문제가 있는지 확인
-    if (filtered.length === 0) {
-        showMessage('선택한 조건에 맞는 문제가 없습니다.', 'warning');
-        return false;
-    }
-    
-    // Fisher-Yates 알고리즘을 사용하여 배열을 무작위로 섞기
-    for (let i = filtered.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
-    }
-    
-    // 필터링되고 섞인 문제 목록 저장
-    filteredQuestions = filtered;
-    return true;
-}
+
 
 // 필터링 함수 수정
 function filterQuestions(selectedChapter, selectedType) {
