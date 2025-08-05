@@ -480,8 +480,7 @@ function showMessage(message, type = 'info') {
 document.addEventListener('DOMContentLoaded', function() {
     const selectionTypeFilter = document.getElementById('selection-type-filter');
 
-    // 초기화 함수 호출
-    init();
+    
     
     if (selectionTypeFilter) {
         selectionTypeFilter.addEventListener('change', () => {
