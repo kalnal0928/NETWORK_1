@@ -14,7 +14,7 @@ const startButton = document.getElementById('start-button'); // 새로 추가
 const quizContainer = document.getElementById('quiz-container'); // 새로 추가
 const resetButton = document.getElementById('reset-button'); // 새로 추가
 
-const selectionTypeFilter = document.getElementById('selection-type-filter');
+
 
 // 상태 변수
 let currentQuestionIndex = 0;
@@ -44,8 +44,7 @@ function init() {
     
     // 시작 버튼 이벤트 리스너 추가
     startButton.addEventListener('click', () => {
-        // 필터 값 검증
-        const selectedType = selectionTypeFilter.value;
+        const selectedType = document.getElementById('selection-type-filter').value;
         
         if (selectedType === '선택하세요') {
             showMessage('문제 유형을 선택해주세요.', 'warning');
@@ -471,16 +470,15 @@ function showMessage(message, type = 'info') {
 
 // 페이지 로드 시 초기화 수정
 document.addEventListener('DOMContentLoaded', function() {
+    const selectionTypeFilter = document.getElementById('selection-type-filter');
+
     // 초기화 함수 호출
     init();
-    
-    // 필터 변경 이벤트 리스너
-    
     
     if (selectionTypeFilter) {
         selectionTypeFilter.addEventListener('change', () => {
             // 필터가 변경될 때마다 문제 수 업데이트
-            filterQuestions();
+            filterQuestions('네트워크', selectionTypeFilter.value);
         });
     }
 });
@@ -507,7 +505,7 @@ function resetQuiz() {
     
     // 필터 초기화
     
-    selectionTypeFilter.value = '선택하세요';
+    document.getElementById('selection-type-filter').value = '선택하세요';
     
     // 선택 화면으로 돌아가기
     showSelectionScreen();
