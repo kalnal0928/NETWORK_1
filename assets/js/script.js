@@ -110,20 +110,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // 서술형 문제인 경우
             else if (currentQuestion.type === 'essay') {
-                const textarea = document.querySelector('.essay-answer');
                 // 이미 정답이 표시된 상태면 다음 문제로 이동
                 if (isEssayAnswerShown) {
                     console.log('다음 문제로 이동');
                     showNextQuestion();
                 } 
-                // 아직 답변을 제출하지 않았으면 제출 처리
-                else if (textarea) {
-                    console.log('서술형 문제 제출');
-                    handleSubmit();
+                // 아직 답변을 제출하지 않았으면 정답 표시
+                else {
+                    console.log('정답 표시');
+                    // 텍스트 영역이 있으면 비활성화
+                    const textarea = document.querySelector('.essay-answer');
+                    if (textarea) {
+                        textarea.disabled = true;
+                    }
+                    // 정답 표시
+                    showAnswer();
                 }
             }
             // 이미 답변이 제출된 경우 다음 문제로 이동
-            else if (isMultipleChoiceAnswered || isEssayAnswerShown) {
+            else if (isMultipleChoiceAnswered) {
                 console.log('다음 문제로 이동');
                 showNextQuestion();
             }
@@ -452,28 +457,14 @@ function handleSubmit() {
     
     if (currentQuestion.type === 'essay') {
         const textarea = document.querySelector('.essay-answer');
-        const message = document.createElement('div');
-        message.className = 'message info';
         
-        if (textarea && textarea.value.trim() !== '') {
-            // 답변이 있는 경우
-            message.textContent = '답변이 제출되었습니다. 정답을 확인하세요.';
-        } else {
-            // 답변이 비어있는 경우
-            message.textContent = '답변이 제출되었습니다. (빈 답변)';
-        }
-        
-        resultContainer.innerHTML = '';
-        resultContainer.appendChild(message);
-        
-        // 텍스트 영역 비활성화
+        // 텍스트 영역이 있으면 비활성화
         if (textarea) {
             textarea.disabled = true;
         }
         
-        isAnswerSubmitted = true;
-        isEssayAnswerShown = true; // 정답 확인 상태로 설정
-        updateButtonStates();
+        // 정답 표시
+        showAnswer();
     }
 }
 
