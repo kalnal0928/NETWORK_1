@@ -202,7 +202,8 @@ function displayMultipleChoiceQuestion(question) {
         
         // 체크박스에 변경 이벤트 리스너 추가
         input.addEventListener('change', () => {
-            // 즉시 정답을 확인하지 않고, 사용자가 제출 버튼을 누를 때 확인
+            // 번호 선택 후 자동으로 포커스 설정 (엔터키 입력을 위해)
+            input.focus();
         });
         
         const labelContent = document.createElement('span');
