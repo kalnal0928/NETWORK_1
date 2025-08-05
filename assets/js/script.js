@@ -1,22 +1,300 @@
-// 객관식 문제 표시 함수 내부의 체크박스 이벤트 리스너 수정
-input.addEventListener('change', () => {
-    // 체크박스 선택 시 포커스 설정 (엔터키 입력을 위해)
-    input.focus();
+import questions from './question.js';
+
+// DOM 요소 추가
+const questionContainer = document.getElementById('question-container');
+const resultContainer = document.getElementById('result-container');
+const submitButton = document.getElementById('submit-button');
+const showAnswerButton = document.getElementById('show-answer-button');
+const prevButton = document.getElementById('prev-button');
+const nextButton = document.getElementById('next-button');
+const currentNumberElement = document.getElementById('current-number');
+const totalQuestionsElement = document.getElementById('total-questions');
+const selectionContainer = document.getElementById('selection-container'); // 새로 추가
+const startButton = document.getElementById('start-button'); // 새로 추가
+const quizContainer = document.getElementById('quiz-container'); // 새로 추가
+const resetButton = document.getElementById('reset-button'); // 새로 추가
+
+// 상태 변수
+let currentQuestionIndex = 0;
+let filteredQuestions = [];  // 빈 배열로 시작
+let incorrectQuestions = []; // 틀린 문제 저장 배열
+let isReviewMode = false; // 오답 복습 모드 여부
+let quizStarted = false;  // 퀴즈 시작 여부 추가
+let isAnswerSubmitted = false; // 답안 제출 상태 추가
+let isMultipleChoiceAnswered = false; // 객관식 답변 상태 추가
+let isEssayAnswerShown = false; // 서술형 정답 표시 상태 추가
+
+document.addEventListener('DOMContentLoaded', function() {
+    const selectionTypeFilter = document.getElementById('selection-type-filter');
+
+    incorrectQuestions = [];
+    isReviewMode = false;
+    quizStarted = false;
     
-    // 체크박스 선택 후 엔터키 이벤트 추가 (한 번만 실행되는 이벤트)
-    const handleEnterKey = function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const submitButton = document.querySelector('.submit-button');
-            if (submitButton) {
-                submitButton.click();
+    // 선택 화면 표시, 문제 화면 숨김
+    showSelectionScreen();
+    
+    // 이벤트 리스너 등록
+    submitButton.addEventListener('click', handleSubmit);
+    showAnswerButton.addEventListener('click', showAnswer);
+    prevButton.addEventListener('click', showPreviousQuestion);
+    nextButton.addEventListener('click', showNextQuestion);
+    resetButton.addEventListener('click', resetQuiz);
+    
+    // 키보드 이벤트 리스너 추가 - 엔터키 처리
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && quizStarted) {
+            event.preventDefault(); // 기본 동작 방지 (폼 제출 등)
+            
+            const currentQuestion = filteredQuestions[currentQuestionIndex];
+            
+            // 객관식 문제이고 아직 답변하지 않은 경우에만 처리
+            if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
+                const submitButton = document.querySelector('.submit-button');
+                if (submitButton) {
+                    submitButton.click();
+                }
             }
-            // 이벤트 리스너 제거 (한 번만 실행)
-            input.removeEventListener('keydown', handleEnterKey);
+            // 서술형 문제인 경우 기존 handleSubmit 함수 호출
+            else if (currentQuestion.type === 'essay' && !isEssayAnswerShown) {
+                handleSubmit();
+            }
+            // 이미 답변이 제출된 경우 다음 문제로 이동
+            else if (isMultipleChoiceAnswered || isEssayAnswerShown) {
+                showNextQuestion();
+            }
         }
-    };
+    });
     
-    // 키다운 이벤트 리스너 추가
-    input.addEventListener('keydown', handleEnterKey);
+    // 시작 버튼 이벤트 리스너 추가
+    startButton.addEventListener('click', () => {
+        const selectedType = selectionTypeFilter.value;
+        
+        if (selectedType === '선택하세요') {
+            showMessage('문제 유형을 선택해주세요.', 'warning');
+            return;
+        }
+        
+        startQuiz('네트워크', selectedType);
+    });
+    
+    if (selectionTypeFilter) {
+        selectionTypeFilter.addEventListener('change', () => {
+            // 필터가 변경될 때마다 문제 수 업데이트
+            filterQuestions('네트워크', selectionTypeFilter.value);
+        });
+    }
 });
+
+// 선택 화면 표시 함수 (신규)
+function showSelectionScreen() {
+    selectionContainer.style.display = 'block';
+    quizContainer.style.display = 'none';
+}
+
+// 필터링 함수 수정
+function filterQuestions(selectedChapter, selectedType) {
+
+    // 모든 문제를 가져옴
+    let filtered = [...questions];
+
+    // 챕터 필터링 (항상 '네트워크'로 고정)
+    filtered = filtered.filter(q => q.chapter === selectedChapter);
+
+    // 유형 필터링
+    if (selectedType !== '선택하세요') {
+        filtered = filtered.filter(q => q.type === selectedType);
+    }
+
+    // 필터링된 문제가 있는지 확인
+    if (filtered.length === 0) {
+        showMessage('선택한 조건에 맞는 문제가 없습니다.', 'warning');
+        return false;
+    }
+
+    // Fisher-Yates 알고리즘을 사용하여 배열을 무작위로 섞기
+    for (let i = filtered.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+    }
+
+    // 필터링되고 섞인 문제 목록 저장
+    filteredQuestions = filtered;
+    return true;
+}
+
+// startQuiz 함수 수정
+function startQuiz(chapter, type) {
+    // 필터링 실행
+    if (!filterQuestions(chapter, type)) {
+        return;
+    }
+
+    // 퀴즈 시작 상태로 변경
+    quizStarted = true;
+
+    // 선택 화면 숨기고 퀴즈 화면 표시
+    selectionContainer.style.display = 'none';
+    quizContainer.style.display = 'block';
+
+    // 첫 문제 표시
+    currentQuestionIndex = 0;
+    updateQuestionCounter();
+    displayQuestion();
+}
+
+// 문제 표시
+function displayQuestion() {
+    if (filteredQuestions.length === 0) return;
+    
+    // 문제 유형이 바뀔 때마다 상태 초기화
+    resetQuestionStates();
+    
+    const currentQuestion = filteredQuestions[currentQuestionIndex];
+    questionContainer.innerHTML = '';  // 컨테이너 초기화
+    resultContainer.innerHTML = '';    // 결과 컨테이너 초기화
+    
+    // 문제 번호와 챕터 표시
+    const questionMeta = document.createElement('div');
+    questionMeta.className = 'question-meta';
+    questionMeta.innerHTML = `<span class="chapter">${currentQuestion.chapter}</span> <span class="number">문제 ${currentQuestion.number}</span>`;
+    questionContainer.appendChild(questionMeta);
+    
+    // 문제 텍스트 표시
+    const questionText = document.createElement('h2');
+    questionText.className = 'question-text';
+    questionText.textContent = currentQuestion.question;
+    questionContainer.appendChild(questionText);
+    
+    // 문제 유형에 따라 다른 UI 표시
+    switch (currentQuestion.type) {
+        case 'multiple-choice':
+            displayMultipleChoiceQuestion(currentQuestion);
+            submitButton.style.display = 'none';        // 제출 버튼 숨김
+            showAnswerButton.style.display = 'none';    // 정답 보기 버튼 숨김
+            break;
+        
+        case 'essay':
+            displayEssayQuestion(currentQuestion);
+            submitButton.style.display = 'block';        // 제출 버튼 표시
+            showAnswerButton.style.display = 'block';    // 정답 보기 버튼 표시
+            break;
+    }
+    
+    // 버튼 상태 업데이트
+    updateButtonStates();
+}
+
+// 문제 상태 초기화 함수 수정
+function resetQuestionStates() {
+    console.log('문제 상태 초기화');
+    isAnswerSubmitted = false;
+    isMultipleChoiceAnswered = false;
+    isEssayAnswerShown = false;
+}
+
+// 객관식 문제 표시 함수 수정
+function displayMultipleChoiceQuestion(question) {
+    // 상태 초기화는 displayQuestion에서 처리하므로 여기서는 제거
+    console.log('객관식 문제 표시');
+    
+    const optionsContainer = document.createElement('div');
+    optionsContainer.className = 'options-container';
+    
+    // 원본 옵션과 정답을 저장
+    const originalOptions = [...question.options];
+    const correctAnswer = question.answer;
+    
+    // 옵션 배열을 섞기
+    const shuffledOptions = [...originalOptions];
+    for (let i = shuffledOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+    }
+    
+    shuffledOptions.forEach((option, index) => {
+        const optionLabel = document.createElement('label');
+        optionLabel.className = 'option-label';
+        
+        const input = document.createElement('input');
+        input.type = 'checkbox'; // 라디오 버튼 대신 체크박스 사용
+        input.name = 'option';
+        input.value = option;
+        input.id = `option-${index}`;
+        input.dataset.optionNumber = (index + 1).toString();
+        
+        // 체크박스에 변경 이벤트 리스너 추가
+        input.addEventListener('change', () => {
+            // 체크박스 선택 시 포커스 설정 (엔터키 입력을 위해)
+            input.focus();
+            
+            // 체크박스 선택 후 엔터키 이벤트 추가 (한 번만 실행되는 이벤트)
+            const handleEnterKey = function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const submitButton = document.querySelector('.submit-button');
+                    if (submitButton) {
+                        submitButton.click();
+                    }
+                    // 이벤트 리스너 제거 (한 번만 실행)
+                    input.removeEventListener('keydown', handleEnterKey);
+                }
+            };
+            
+            // 키다운 이벤트 리스너 추가
+            input.addEventListener('keydown', handleEnterKey);
+        });
+        
+        const labelContent = document.createElement('span');
+        labelContent.innerHTML = `<span class="option-number">${index + 1}.</span> ${option}`;
+        
+        optionLabel.appendChild(input);
+        optionLabel.appendChild(labelContent);
+        optionsContainer.appendChild(optionLabel);
+    });
+    
+    questionContainer.appendChild(optionsContainer);
+
+    // 객관식 문제용 제출 버튼 추가
+    const multipleChoiceSubmitButton = document.createElement('button');
+    multipleChoiceSubmitButton.textContent = '제출';
+    multipleChoiceSubmitButton.className = 'submit-button';
+    multipleChoiceSubmitButton.addEventListener('click', () => {
+        const selectedOptions = document.querySelectorAll('input[name="option"]:checked');
+        const selectedAnswers = Array.from(selectedOptions).map(input => input.value);
+        
+        // 정답이 배열인지 확인
+        const isCorrect = Array.isArray(correctAnswer)
+            ? selectedAnswers.length === correctAnswer.length && selectedAnswers.every(answer => correctAnswer.includes(answer))
+            : selectedAnswers.length === 1 && selectedAnswers[0] === correctAnswer;
+
+        displayResult(isCorrect, selectedAnswers.join(', '), correctAnswer);
+
+        // 모든 체크박스 비활성화
+        document.querySelectorAll('input[name="option"]').forEach(checkbox => {
+            checkbox.disabled = true;
+        });
+
+        // 정답인 항목 강조
+        document.querySelectorAll('.option-label').forEach(label => {
+            const checkboxInput = label.querySelector('input[type="checkbox"]');
+            const isAnswer = Array.isArray(correctAnswer)
+                ? correctAnswer.includes(checkboxInput.value)
+                : checkboxInput.value === correctAnswer;
+
+            if (isAnswer) {
+                label.classList.add('correct-answer');
+            }
+        });
+
+        isMultipleChoiceAnswered = true;
+
+        if (currentQuestionIndex === filteredQuestions.length - 1) {
+            setTimeout(() => {
+                handleLastQuestion();
+            }, 1500);
+        }
+    });
+    questionContainer.appendChild(multipleChoiceSubmitButton);
+}
 
