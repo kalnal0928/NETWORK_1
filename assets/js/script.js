@@ -85,7 +85,10 @@ function filterQuestions(selectedChapter, selectedType) {
 }
 
 // startQuiz 함수 수정
-function startQuiz(chapter, type) {
+    }
+}
+
+// startQuiz 함수 수정
     // 필터링 실행
     if (!filterQuestions(chapter, type)) {
         return;
