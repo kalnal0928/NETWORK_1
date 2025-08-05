@@ -46,15 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!quizStarted) return; // 퀴즈가 시작되지 않았으면 무시
         
         const currentQuestion = filteredQuestions[currentQuestionIndex];
+        if (!currentQuestion) return; // 현재 문제가 없으면 무시
         
         // 숫자 키 1-4 처리 (객관식 문제일 때만)
-        if (currentQuestion && currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
+        if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
             // 숫자 키 1-4 또는 키패드 1-4
-            if ((event.key >= '1' && event.key <= '4') || (event.key >= 'Numpad1' && event.key <= 'Numpad4')) {
+            if ((event.key >= '1' && event.key <= '4') || (event.key.startsWith('Numpad') && event.key.length === 7 && event.key[6] >= '1' && event.key[6] <= '4')) {
                 event.preventDefault();
                 
                 // 키 값에서 숫자 추출 (1-4)
-                const num = event.key.replace('Numpad', '');
+                const num = event.key.includes('Numpad') ? event.key[6] : event.key;
                 const optionIndex = parseInt(num) - 1;
                 
                 // 해당 번호의 체크박스 찾기
@@ -65,16 +66,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // 포커스 설정
                     checkboxes[optionIndex].focus();
+                    
+                    console.log(`숫자키 ${num} 입력: 옵션 ${optionIndex + 1} 선택됨`);
                 }
-                return;
             }
         }
         
-        if (event.key === 'Enter' && quizStarted) {
+        // 엔터키 처리
+        if (event.key === 'Enter') {
             event.preventDefault(); // 기본 동작 방지 (폼 제출 등)
+            console.log('엔터키 입력 감지');
             
             // 객관식 문제이고 아직 답변하지 않은 경우에만 처리
             if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
+                console.log('객관식 문제 제출');
                 const submitButton = document.querySelector('.submit-button');
                 if (submitButton) {
                     submitButton.click();
@@ -82,10 +87,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // 서술형 문제인 경우 기존 handleSubmit 함수 호출
             else if (currentQuestion.type === 'essay' && !isEssayAnswerShown) {
+                console.log('서술형 문제 제출');
                 handleSubmit();
             }
             // 이미 답변이 제출된 경우 다음 문제로 이동
             else if (isMultipleChoiceAnswered || isEssayAnswerShown) {
+                console.log('다음 문제로 이동');
                 showNextQuestion();
             }
         }
@@ -252,24 +259,10 @@ function displayMultipleChoiceQuestion(question) {
         input.addEventListener('change', () => {
             // 체크박스 선택 시 포커스 설정 (엔터키 입력을 위해)
             input.focus();
-            
-            // 체크박스 선택 후 엔터키 이벤트 추가 (한 번만 실행되는 이벤트)
-            const handleEnterKey = function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const submitButton = document.querySelector('.submit-button');
-                    if (submitButton) {
-                        submitButton.click();
-                    }
-                    // 이벤트 리스너 제거 (한 번만 실행)
-                    input.removeEventListener('keydown', handleEnterKey);
-                }
-            };
-            
-            // 키다운 이벤트 리스너 추가
-            input.addEventListener('keydown', handleEnterKey);
+            console.log(`체크박스 ${index + 1} 상태 변경: ${input.checked ? '선택됨' : '선택 해제됨'}`);
         });
         
+        // 키다운 이벤트는 전역 이벤트 리스너에서 처리하므로 여기서는 제거
         const labelContent = document.createElement('span');
         labelContent.innerHTML = `<span class="option-number">${index + 1}.</span> ${option}`;
         
