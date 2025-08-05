@@ -434,23 +434,28 @@ function handleSubmit() {
     
     if (currentQuestion.type === 'essay') {
         const textarea = document.querySelector('.essay-answer');
+        const message = document.createElement('div');
+        message.className = 'message info';
+        
         if (textarea && textarea.value.trim() !== '') {
-            // 서술형은 정답 확인 없이 제출 완료 처리
-            const message = document.createElement('div');
-            message.className = 'message info';
+            // 답변이 있는 경우
             message.textContent = '답변이 제출되었습니다. 정답을 확인하세요.';
-            
-            resultContainer.innerHTML = '';
-            resultContainer.appendChild(message);
-            
-            // 텍스트 영역 비활성화
-            textarea.disabled = true;
-            
-            isAnswerSubmitted = true;
-            updateButtonStates();
         } else {
-            showMessage('답변을 입력해주세요.', 'warning');
+            // 답변이 비어있는 경우
+            message.textContent = '답변이 제출되었습니다. (빈 답변)';
         }
+        
+        resultContainer.innerHTML = '';
+        resultContainer.appendChild(message);
+        
+        // 텍스트 영역 비활성화
+        if (textarea) {
+            textarea.disabled = true;
+        }
+        
+        isAnswerSubmitted = true;
+        isEssayAnswerShown = true; // 정답 확인 상태로 설정
+        updateButtonStates();
     }
 }
 
@@ -592,4 +597,3 @@ function resetQuiz() {
 }
 
 export default {};
-
