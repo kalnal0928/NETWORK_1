@@ -66,23 +66,31 @@ document.addEventListener('DOMContentLoaded', function() {
         // 숫자 키 1-4 처리 (객관식 문제일 때만)
         if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
             // 숫자 키 1-4 또는 키패드 1-4
-            if ((event.key >= '1' && event.key <= '4') || (event.key.startsWith('Numpad') && event.key.length === 7 && event.key[6] >= '1' && event.key[6] <= '4')) {
+            if ((event.key >= '1' && event.key <= '4') || (event.code.startsWith('Numpad') && event.code.length === 7 && event.code[6] >= '1' && event.code[6] <= '4')) {
                 event.preventDefault();
                 
                 // 키 값에서 숫자 추출 (1-4)
-                const num = event.key.includes('Numpad') ? event.key[6] : event.key;
+                const num = event.code.includes('Numpad') ? event.code[6] : event.key;
                 const optionIndex = parseInt(num) - 1;
                 
                 // 해당 번호의 체크박스 찾기
                 const checkboxes = document.querySelectorAll('input[name="option"]');
                 if (optionIndex >= 0 && optionIndex < checkboxes.length) {
-                    // 체크박스 상태 토글
-                    checkboxes[optionIndex].checked = !checkboxes[optionIndex].checked;
+                    // 모든 체크박스 해제 후 선택한 옵션만 체크 (라디오 버튼처럼 동작)
+                    checkboxes.forEach((cb, idx) => {
+                        checkboxes[idx].checked = (idx === optionIndex);
+                    });
                     
                     // 포커스 설정
                     checkboxes[optionIndex].focus();
                     
                     console.log(`숫자키 ${num} 입력: 옵션 ${optionIndex + 1} 선택됨`);
+                    
+                    // 자동으로 제출하기 (선택사항)
+                    // const submitButton = document.querySelector('.submit-button');
+                    // if (submitButton) {
+                    //     setTimeout(() => submitButton.click(), 100);
+                    // }
                 }
             }
         }
