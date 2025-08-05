@@ -72,13 +72,21 @@ function filterQuestions() {
     let filtered = [...questions];
     
     // 챕터 필터링
-    if (selectedChapter !== 'all' && selectedChapter !== '선택하세요') {
+    if (selectedChapter === '네트워크') {
         filtered = filtered.filter(q => q.chapter === selectedChapter);
+    } else {
+        // '선택하세요'가 아닌 다른 값이 선택된 경우 (예: 'all'이 제거되었으므로)
+        // 모든 문제를 포함하거나, 특정 챕터만 포함하도록 로직을 조정할 수 있습니다.
+        // 여기서는 '네트워크' 챕터만 허용하므로, 다른 선택은 무시하거나 오류 처리할 수 있습니다.
+        // 현재는 '네트워크'가 아니면 필터링되지 않으므로, 이 부분은 그대로 둡니다.
     }
     
     // 유형 필터링
-    if (selectedType !== 'all' && selectedType !== '선택하세요') {
+    if (selectedType === 'multiple-choice' || selectedType === 'essay') {
         filtered = filtered.filter(q => q.type === selectedType);
+    } else {
+        // '선택하세요'가 아닌 다른 값이 선택된 경우 (예: 'all'이 제거되었으므로)
+        // 'multiple-choice' 또는 'essay'가 아니면 필터링되지 않으므로, 이 부분은 그대로 둡니다.
     }
     
     // 필터링된 문제가 있는지 확인
