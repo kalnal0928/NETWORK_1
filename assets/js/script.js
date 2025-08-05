@@ -82,9 +82,10 @@ function filterQuestions(selectedChapter, selectedType) {
     if (selectedType !== '선택하세요') {
                 filtered = filtered.filter(q => q.type === selectedType);
     }
+}
 
-    }
-
+// startQuiz 함수 수정
+function startQuiz(chapter, type) {
     // 필터링 실행
     if (!filterQuestions(chapter, type)) {
         return;
