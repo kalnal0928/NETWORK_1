@@ -298,3 +298,249 @@ function displayMultipleChoiceQuestion(question) {
     questionContainer.appendChild(multipleChoiceSubmitButton);
 }
 
+// 서술형 문제 표시 함수
+function displayEssayQuestion(question) {
+    console.log('서술형 문제 표시');
+    
+    const answerContainer = document.createElement('div');
+    answerContainer.className = 'answer-container';
+    
+    const textarea = document.createElement('textarea');
+    textarea.className = 'essay-answer';
+    textarea.placeholder = '답변을 입력하세요. (Enter 키를 눌러 제출)';
+    textarea.rows = 5;
+    
+    // 텍스트 영역에 키 이벤트 리스너 추가
+    textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // 기본 줄바꿈 방지
+            handleSubmit(); // 제출 함수 호출
+        }
+    });
+    
+    answerContainer.appendChild(textarea);
+    questionContainer.appendChild(answerContainer);
+    
+    // 텍스트 영역에 포커스 설정
+    setTimeout(() => {
+        textarea.focus();
+    }, 100);
+}
+
+// 결과 표시 함수
+function displayResult(isCorrect, userAnswer, correctAnswer) {
+    resultContainer.innerHTML = '';
+    
+    const resultDiv = document.createElement('div');
+    resultDiv.className = `result ${isCorrect ? 'correct' : 'incorrect'}`;
+    
+    const resultIcon = document.createElement('span');
+    resultIcon.className = 'result-icon';
+    resultIcon.textContent = isCorrect ? '✓' : '✗';
+    
+    const resultText = document.createElement('div');
+    resultText.className = 'result-text';
+    
+    if (isCorrect) {
+        resultText.innerHTML = `<p>정답입니다!</p>`;
+    } else {
+        resultText.innerHTML = `<p>오답입니다.</p><p>제출한 답: ${userAnswer}</p><p>정답: ${Array.isArray(correctAnswer) ? correctAnswer.join(', ') : correctAnswer}</p>`;
+        
+        // 오답 문제 저장 (중복 방지)
+        if (!isReviewMode && !incorrectQuestions.some(q => q.number === filteredQuestions[currentQuestionIndex].number)) {
+            incorrectQuestions.push(filteredQuestions[currentQuestionIndex]);
+        }
+    }
+    
+    resultDiv.appendChild(resultIcon);
+    resultDiv.appendChild(resultText);
+    resultContainer.appendChild(resultDiv);
+    
+    isAnswerSubmitted = true;
+    updateButtonStates();
+}
+
+// 정답 표시 함수
+function showAnswer() {
+    if (isEssayAnswerShown) return;
+    
+    const currentQuestion = filteredQuestions[currentQuestionIndex];
+    
+    if (currentQuestion.type === 'essay') {
+        resultContainer.innerHTML = '';
+        
+        const answerReveal = document.createElement('div');
+        answerReveal.className = 'answer-reveal';
+        answerReveal.innerHTML = `<h3>정답</h3><p>${currentQuestion.answer}</p>`;
+        
+        resultContainer.appendChild(answerReveal);
+        isEssayAnswerShown = true;
+        updateButtonStates();
+    }
+}
+
+// 제출 처리 함수
+function handleSubmit() {
+    const currentQuestion = filteredQuestions[currentQuestionIndex];
+    
+    if (currentQuestion.type === 'essay') {
+        const textarea = document.querySelector('.essay-answer');
+        if (textarea && textarea.value.trim() !== '') {
+            // 서술형은 정답 확인 없이 제출 완료 처리
+            const message = document.createElement('div');
+            message.className = 'message info';
+            message.textContent = '답변이 제출되었습니다. 정답을 확인하세요.';
+            
+            resultContainer.innerHTML = '';
+            resultContainer.appendChild(message);
+            
+            // 텍스트 영역 비활성화
+            textarea.disabled = true;
+            
+            isAnswerSubmitted = true;
+            updateButtonStates();
+        } else {
+            showMessage('답변을 입력해주세요.', 'warning');
+        }
+    }
+}
+
+// 이전 문제 표시 함수
+function showPreviousQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        updateQuestionCounter();
+        displayQuestion();
+    }
+}
+
+// 다음 문제 표시 함수
+function showNextQuestion() {
+    if (currentQuestionIndex < filteredQuestions.length - 1) {
+        currentQuestionIndex++;
+        updateQuestionCounter();
+        displayQuestion();
+    } else {
+        handleLastQuestion();
+    }
+}
+
+// 마지막 문제 처리 함수
+function handleLastQuestion() {
+    // 모든 문제를 다 풀었을 때
+    questionContainer.innerHTML = '';
+    resultContainer.innerHTML = '';
+    
+    const completionMessage = document.createElement('div');
+    completionMessage.className = 'message success';
+    completionMessage.innerHTML = `<h2>모든 문제를 완료했습니다!</h2><p>총 ${filteredQuestions.length}개의 문제 중 ${filteredQuestions.length - incorrectQuestions.length}개를 맞추셨습니다.</p>`;
+    
+    questionContainer.appendChild(completionMessage);
+    
+    // 오답이 있는 경우 복습 버튼 표시
+    if (incorrectQuestions.length > 0) {
+        const reviewButton = document.createElement('button');
+        reviewButton.className = 'review-button';
+        reviewButton.textContent = `오답 복습하기 (${incorrectQuestions.length}문제)`;
+        reviewButton.addEventListener('click', startReviewMode);
+        
+        questionContainer.appendChild(reviewButton);
+    }
+    
+    // 처음으로 돌아가는 버튼
+    const returnButton = document.createElement('button');
+    returnButton.className = 'return-button';
+    returnButton.textContent = '처음으로 돌아가기';
+    returnButton.addEventListener('click', resetQuiz);
+    
+    questionContainer.appendChild(returnButton);
+    
+    // 버튼 상태 업데이트
+    prevButton.style.display = 'none';
+    submitButton.style.display = 'none';
+    showAnswerButton.style.display = 'none';
+    nextButton.style.display = 'none';
+}
+
+// 오답 복습 모드 시작 함수
+function startReviewMode() {
+    if (incorrectQuestions.length === 0) return;
+    
+    isReviewMode = true;
+    filteredQuestions = [...incorrectQuestions];
+    incorrectQuestions = []; // 복습 중 오답은 다시 이 배열에 추가됨
+    
+    currentQuestionIndex = 0;
+    updateQuestionCounter();
+    displayQuestion();
+    
+    // 복습 모드 메시지 표시
+    showMessage('오답 복습 모드입니다. 틀린 문제들을 다시 풀어보세요.', 'info');
+}
+
+// 문제 카운터 업데이트 함수
+function updateQuestionCounter() {
+    currentNumberElement.textContent = currentQuestionIndex + 1;
+    totalQuestionsElement.textContent = filteredQuestions.length;
+}
+
+// 버튼 상태 업데이트 함수
+function updateButtonStates() {
+    // 이전 버튼 상태
+    prevButton.disabled = currentQuestionIndex === 0;
+    
+    // 제출 버튼 상태 (서술형 문제에만 표시)
+    submitButton.disabled = isAnswerSubmitted;
+    
+    // 정답 보기 버튼 상태 (서술형 문제에만 표시)
+    showAnswerButton.disabled = !isAnswerSubmitted || isEssayAnswerShown;
+    
+    // 다음 버튼 상태
+    const isLastQuestion = currentQuestionIndex === filteredQuestions.length - 1;
+    const canProceed = (filteredQuestions[currentQuestionIndex].type === 'multiple-choice' && isMultipleChoiceAnswered) || 
+                      (filteredQuestions[currentQuestionIndex].type === 'essay' && isEssayAnswerShown);
+    
+    nextButton.disabled = isLastQuestion && !canProceed;
+}
+
+// 메시지 표시 함수
+function showMessage(text, type = 'info') {
+    const messageContainer = document.createElement('div');
+    messageContainer.className = `message ${type}`;
+    messageContainer.textContent = text;
+    
+    resultContainer.innerHTML = '';
+    resultContainer.appendChild(messageContainer);
+    
+    // 3초 후 메시지 자동 제거 (경고 메시지만)
+    if (type === 'warning') {
+        setTimeout(() => {
+            if (resultContainer.contains(messageContainer)) {
+                resultContainer.removeChild(messageContainer);
+            }
+        }, 3000);
+    }
+}
+
+// 퀴즈 초기화 함수
+function resetQuiz() {
+    // 상태 초기화
+    currentQuestionIndex = 0;
+    filteredQuestions = [];
+    incorrectQuestions = [];
+    isReviewMode = false;
+    quizStarted = false;
+    isAnswerSubmitted = false;
+    isMultipleChoiceAnswered = false;
+    isEssayAnswerShown = false;
+    
+    // UI 초기화
+    questionContainer.innerHTML = '';
+    resultContainer.innerHTML = '';
+    
+    // 선택 화면으로 돌아가기
+    showSelectionScreen();
+}
+
+export default {};
+
