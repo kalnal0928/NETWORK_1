@@ -100,7 +100,10 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); // 기본 동작 방지 (폼 제출 등)
             console.log('엔터키 입력 감지');
             
-            // 객관식 문제이고 아직 답변하지 않은 경우에만 처리
+            // 현재 문제 가져오기
+            const currentQuestion = filteredQuestions[currentQuestionIndex];
+            
+            // 객관식 문제 처리
             if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
                 console.log('객관식 문제 제출');
                 const submitButton = document.querySelector('.submit-button');
@@ -108,14 +111,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     submitButton.click();
                 }
             }
-            // 서술형 문제인 경우
+            // 서술형 문제 처리
             else if (currentQuestion.type === 'essay') {
+                console.log('서술형 문제 처리');
                 // 이미 정답이 표시된 상태면 다음 문제로 이동
                 if (isEssayAnswerShown) {
                     console.log('다음 문제로 이동');
                     showNextQuestion();
                 } 
-                // 아직 답변을 제출하지 않았으면 정답 표시
+                // 아직 정답을 표시하지 않았으면 정답 표시
                 else {
                     console.log('정답 표시');
                     // 텍스트 영역이 있으면 비활성화
@@ -125,9 +129,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     // 정답 표시
                     showAnswer();
+                    // 상태 업데이트
+                    isEssayAnswerShown = true;
+                    isAnswerSubmitted = true;
+                    updateButtonStates();
                 }
             }
-            // 이미 답변이 제출된 경우 다음 문제로 이동
+            // 이미 답변이 제출된 객관식 문제인 경우 다음 문제로 이동
             else if (isMultipleChoiceAnswered) {
                 console.log('다음 문제로 이동');
                 showNextQuestion();
@@ -445,9 +453,6 @@ function showAnswer() {
         answerReveal.innerHTML = `<h3>정답</h3><div class="answer-content"><p>${formattedAnswer}</p></div>`;
         
         resultContainer.appendChild(answerReveal);
-        isEssayAnswerShown = true;
-        isAnswerSubmitted = true;
-        updateButtonStates();
     }
 }
 
@@ -465,6 +470,11 @@ function handleSubmit() {
         
         // 정답 표시
         showAnswer();
+        
+        // 상태 업데이트
+        isEssayAnswerShown = true;
+        isAnswerSubmitted = true;
+        updateButtonStates();
     }
 }
 
