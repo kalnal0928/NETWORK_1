@@ -43,10 +43,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 키보드 이벤트 리스너 추가 - 엔터키 처리
     document.addEventListener('keydown', function(event) {
+        if (!quizStarted) return; // 퀴즈가 시작되지 않았으면 무시
+        
+        const currentQuestion = filteredQuestions[currentQuestionIndex];
+        
+        // 숫자 키 1-4 처리 (객관식 문제일 때만)
+        if (currentQuestion && currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
+            // 숫자 키 1-4 또는 키패드 1-4
+            if ((event.key >= '1' && event.key <= '4') || (event.key >= 'Numpad1' && event.key <= 'Numpad4')) {
+                event.preventDefault();
+                
+                // 키 값에서 숫자 추출 (1-4)
+                const num = event.key.replace('Numpad', '');
+                const optionIndex = parseInt(num) - 1;
+                
+                // 해당 번호의 체크박스 찾기
+                const checkboxes = document.querySelectorAll('input[name="option"]');
+                if (optionIndex >= 0 && optionIndex < checkboxes.length) {
+                    // 체크박스 상태 토글
+                    checkboxes[optionIndex].checked = !checkboxes[optionIndex].checked;
+                    
+                    // 포커스 설정
+                    checkboxes[optionIndex].focus();
+                }
+                return;
+            }
+        }
+        
         if (event.key === 'Enter' && quizStarted) {
             event.preventDefault(); // 기본 동작 방지 (폼 제출 등)
-            
-            const currentQuestion = filteredQuestions[currentQuestionIndex];
             
             // 객관식 문제이고 아직 답변하지 않은 경우에만 처리
             if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
