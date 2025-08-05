@@ -260,20 +260,57 @@ function resetQuestionStates() {
     isEssayAnswerShown = false;
 }
 
+// 객관식 문제 제출 처리 함수
+function handleMultipleChoiceSubmit(correctAnswer) {
+    const selectedOptions = document.querySelectorAll('input[name="option"]:checked');
+    const selectedAnswers = Array.from(selectedOptions).map(input => input.value);
+
+    // 정답 확인
+    const isCorrect = Array.isArray(correctAnswer)
+        ? selectedAnswers.length === correctAnswer.length && selectedAnswers.every(answer => correctAnswer.includes(answer))
+        : selectedAnswers.length === 1 && selectedAnswers[0] === correctAnswer;
+
+    displayResult(isCorrect, selectedAnswers.join(', '), correctAnswer);
+
+    // 모든 옵션 비활성화
+    document.querySelectorAll('input[name="option"]').forEach(input => {
+        input.disabled = true;
+    });
+
+    // 정답 강조
+    document.querySelectorAll('.option-label').forEach(label => {
+        const input = label.querySelector('input[name="option"]');
+        const isAnswer = Array.isArray(correctAnswer)
+            ? correctAnswer.includes(input.value)
+            : input.value === correctAnswer;
+
+        if (isAnswer) {
+            label.classList.add('correct-answer');
+        }
+    });
+
+    isMultipleChoiceAnswered = true;
+    updateButtonStates();
+
+    if (currentQuestionIndex === filteredQuestions.length - 1) {
+        setTimeout(() => {
+            handleLastQuestion();
+        }, 1500);
+    }
+}
+
 // 객관식 문제 표시 함수 수정
 function displayMultipleChoiceQuestion(question) {
-    // 상태 초기화는 displayQuestion에서 처리하므로 여기서는 제거
     console.log('객관식 문제 표시');
     
     const optionsContainer = document.createElement('div');
     optionsContainer.className = 'options-container';
     
-    // 원본 옵션과 정답을 저장
-    const originalOptions = [...question.options];
     const correctAnswer = question.answer;
-    
-    // 옵션 배열을 섞기
-    const shuffledOptions = [...originalOptions];
+    const isMultiAnswer = Array.isArray(correctAnswer);
+
+    // 옵션 섞기
+    const shuffledOptions = [...question.options];
     for (let i = shuffledOptions.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
@@ -284,20 +321,19 @@ function displayMultipleChoiceQuestion(question) {
         optionLabel.className = 'option-label';
         
         const input = document.createElement('input');
-        input.type = 'checkbox'; // 라디오 버튼 대신 체크박스 사용
+        input.type = isMultiAnswer ? 'checkbox' : 'radio';
         input.name = 'option';
         input.value = option;
         input.id = `option-${index}`;
-        input.dataset.optionNumber = (index + 1).toString();
         
-        // 체크박스에 변경 이벤트 리스너 추가
-        input.addEventListener('change', () => {
-            // 체크박스 선택 시 포커스 설정 (엔터키 입력을 위해)
-            input.focus();
-            console.log(`체크박스 ${index + 1} 상태 변경: ${input.checked ? '선택됨' : '선택 해제됨'}`);
-        });
+        if (!isMultiAnswer) {
+            input.addEventListener('change', () => {
+                if (input.checked) {
+                    handleMultipleChoiceSubmit(correctAnswer);
+                }
+            });
+        }
         
-        // 키다운 이벤트는 전역 이벤트 리스너에서 처리하므로 여기서는 제거
         const labelContent = document.createElement('span');
         labelContent.innerHTML = `<span class="option-number">${index + 1}.</span> ${option}`;
         
@@ -308,47 +344,15 @@ function displayMultipleChoiceQuestion(question) {
     
     questionContainer.appendChild(optionsContainer);
 
-    // 객관식 문제용 제출 버튼 추가
-    const multipleChoiceSubmitButton = document.createElement('button');
-    multipleChoiceSubmitButton.textContent = '제출';
-    multipleChoiceSubmitButton.className = 'submit-button';
-    multipleChoiceSubmitButton.addEventListener('click', () => {
-        const selectedOptions = document.querySelectorAll('input[name="option"]:checked');
-        const selectedAnswers = Array.from(selectedOptions).map(input => input.value);
-        
-        // 정답이 배열인지 확인
-        const isCorrect = Array.isArray(correctAnswer)
-            ? selectedAnswers.length === correctAnswer.length && selectedAnswers.every(answer => correctAnswer.includes(answer))
-            : selectedAnswers.length === 1 && selectedAnswers[0] === correctAnswer;
-
-        displayResult(isCorrect, selectedAnswers.join(', '), correctAnswer);
-
-        // 모든 체크박스 비활성화
-        document.querySelectorAll('input[name="option"]').forEach(checkbox => {
-            checkbox.disabled = true;
+    if (isMultiAnswer) {
+        const multipleChoiceSubmitButton = document.createElement('button');
+        multipleChoiceSubmitButton.textContent = '제출';
+        multipleChoiceSubmitButton.className = 'submit-button';
+        multipleChoiceSubmitButton.addEventListener('click', () => {
+            handleMultipleChoiceSubmit(correctAnswer);
         });
-
-        // 정답인 항목 강조
-        document.querySelectorAll('.option-label').forEach(label => {
-            const checkboxInput = label.querySelector('input[type="checkbox"]');
-            const isAnswer = Array.isArray(correctAnswer)
-                ? correctAnswer.includes(checkboxInput.value)
-                : checkboxInput.value === correctAnswer;
-
-            if (isAnswer) {
-                label.classList.add('correct-answer');
-            }
-        });
-
-        isMultipleChoiceAnswered = true;
-
-        if (currentQuestionIndex === filteredQuestions.length - 1) {
-            setTimeout(() => {
-                handleLastQuestion();
-            }, 1500);
-        }
-    });
-    questionContainer.appendChild(multipleChoiceSubmitButton);
+        questionContainer.appendChild(multipleChoiceSubmitButton);
+    }
 }
 
 // 서술형 문제 표시 함수 개선
