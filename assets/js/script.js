@@ -243,8 +243,8 @@ function displayQuestion() {
         
         case 'essay':
             displayEssayQuestion(currentQuestion);
-            submitButton.style.display = 'block';        // 제출 버튼 표시
-            showAnswerButton.style.display = 'block';    // 정답 보기 버튼 표시
+            submitButton.style.display = 'inline-block'; // 제출 버튼 표시
+            showAnswerButton.style.display = 'inline-block'; // 정답 보기 버튼 표시
             break;
     }
     
