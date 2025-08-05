@@ -148,11 +148,7 @@ function displayQuestion() {
             submitButton.style.display = 'none';        // 제출 버튼 숨김
             showAnswerButton.style.display = 'none';    // 정답 보기 버튼 숨김
             break;
-        case 'fill-in-blank':
-            displayFillInBlankQuestion(currentQuestion);
-            submitButton.style.display = 'block';        // 제출 버튼 표시
-            showAnswerButton.style.display = 'block';    // 정답 보기 버튼 표시
-            break;
+        
         case 'essay':
             displayEssayQuestion(currentQuestion);
             submitButton.style.display = 'block';        // 제출 버튼 표시
@@ -196,47 +192,17 @@ function displayMultipleChoiceQuestion(question) {
         optionLabel.className = 'option-label';
         
         const input = document.createElement('input');
-        input.type = 'radio';
+        input.type = 'checkbox'; // 라디오 버튼 대신 체크박스 사용
         input.name = 'option';
         input.value = option;
         input.id = `option-${index}`;
         input.dataset.optionNumber = (index + 1).toString();
         
-        // 라디오 버튼에 변경 이벤트 리스너 추가
+        // 체크박스에 변경 이벤트 리스너 추가
         input.addEventListener('change', () => {
-            if (input.checked) {
-                console.log('객관식 답변 선택됨');
-                // 선택 즉시 정답 체크
-                const isCorrect = option === correctAnswer;
-                displayResult(isCorrect, option, correctAnswer);
-                
-                // 모든 라디오 버튼 비활성화하여 추가 선택 방지
-                document.querySelectorAll('input[name="option"]').forEach(radio => {
-                    radio.disabled = true;
-                });
-                
-                // 정답인 항목 강조
-                document.querySelectorAll('.option-label').forEach(label => {
-                    const radioInput = label.querySelector('input[type="radio"]');
-                    if (radioInput.value === correctAnswer) {
-                        label.classList.add('correct-answer');
-                    }
-                });
-
-                // 객관식 답변 상태 업데이트
-                isMultipleChoiceAnswered = true;
-                console.log('객관식 답변 상태 업데이트:', isMultipleChoiceAnswered);
-
-                // 마지막 문제인 경우 잠시 후 선택지 표시
-                if (currentQuestionIndex === filteredQuestions.length - 1) {
-                    setTimeout(() => {
-                        handleLastQuestion();
-                    }, 1500);
-                }
-            }
+            // 즉시 정답을 확인하지 않고, 사용자가 제출 버튼을 누를 때 확인
         });
         
-        // 옵션 번호와 텍스트를 포함하는 span 생성
         const labelContent = document.createElement('span');
         labelContent.innerHTML = `<span class="option-number">${index + 1}.</span> ${option}`;
         
@@ -246,50 +212,51 @@ function displayMultipleChoiceQuestion(question) {
     });
     
     questionContainer.appendChild(optionsContainer);
-}
 
-// 빈칸 채우기 문제 표시 함수 수정
-function displayFillInBlankQuestion(question) {
-    // 상태 초기화는 displayQuestion에서 처리하므로 여기서는 제거
-    console.log('빈칸 채우기 문제 표시');
-    
-    const answerContainer = document.createElement('div');
-    answerContainer.className = 'fill-blank-container';
+    // 객관식 문제용 제출 버튼 추가
+    const multipleChoiceSubmitButton = document.createElement('button');
+    multipleChoiceSubmitButton.textContent = '제출';
+    multipleChoiceSubmitButton.className = 'submit-button';
+    multipleChoiceSubmitButton.addEventListener('click', () => {
+        const selectedOptions = document.querySelectorAll('input[name="option"]:checked');
+        const selectedAnswers = Array.from(selectedOptions).map(input => input.value);
+        
+        // 정답이 배열인지 확인
+        const isCorrect = Array.isArray(correctAnswer)
+            ? selectedAnswers.length === correctAnswer.length && selectedAnswers.every(answer => correctAnswer.includes(answer))
+            : selectedAnswers.length === 1 && selectedAnswers[0] === correctAnswer;
 
-    // 괄호 안에 언더바가 2개 이상 있을 때만 입력 칸으로 변환
-    const formattedQuestion = question.question.replace(/\(([^)]*)\)/g, function(match, inner) {
-        if ((inner.match(/_/g) || []).length >= 2) {
-            // 모바일 환경을 위한 속성 추가
-            return '<input type="text" class="blank-input" placeholder="정답 입력" inputmode="text" enterkeyhint="done">';
-        }
-        return match;
-    });
+        displayResult(isCorrect, selectedAnswers.join(', '), correctAnswer);
 
-    answerContainer.innerHTML = formattedQuestion;
-    questionContainer.appendChild(answerContainer);
+        // 모든 체크박스 비활성화
+        document.querySelectorAll('input[name="option"]').forEach(checkbox => {
+            checkbox.disabled = true;
+        });
 
-    // 입력 필드에 이벤트 리스너 추가
-    const blankInput = document.querySelector('.blank-input');
-    if (blankInput) {
-        // 모바일 환경을 위한 blur 이벤트
-        blankInput.addEventListener('blur', () => {
-            // 입력 필드에서 포커스가 벗어날 때 자동 제출 (선택적)
-            if (blankInput.value.trim() && !isAnswerSubmitted) {
-                handleSubmit();
+        // 정답인 항목 강조
+        document.querySelectorAll('.option-label').forEach(label => {
+            const checkboxInput = label.querySelector('input[type="checkbox"]');
+            const isAnswer = Array.isArray(correctAnswer)
+                ? correctAnswer.includes(checkboxInput.value)
+                : checkboxInput.value === correctAnswer;
+
+            if (isAnswer) {
+                label.classList.add('correct-answer');
             }
         });
-        
-        // 자동 포커스 설정
-        setTimeout(() => {
-            blankInput.focus();
-        }, 100);
-    }
 
-    submitButton.style.display = 'block';
-    showAnswerButton.style.display = 'block';
-    submitButton.disabled = false;
-    showAnswerButton.disabled = false;
+        isMultipleChoiceAnswered = true;
+
+        if (currentQuestionIndex === filteredQuestions.length - 1) {
+            setTimeout(() => {
+                handleLastQuestion();
+            }, 1500);
+        }
+    });
+    questionContainer.appendChild(multipleChoiceSubmitButton);
 }
+
+
 
 // 서술형 문제 표시 함수 수정
 function displayEssayQuestion(question) {
@@ -333,39 +300,9 @@ function handleSubmit() {
     let isCorrect = false;
     
     switch (currentQuestion.type) {
-        case 'multiple-choice':
-            const selectedOption = document.querySelector('input[name="option"]:checked');
-            if (selectedOption) {
-                userAnswer = selectedOption.value;
-                isCorrect = userAnswer === currentQuestion.answer;
-            } else {
-                showMessage('답을 선택해주세요!', 'warning');
-                return;
-            }
-            break;
+        
             
-        case 'fill-in-blank':
-            const blankInput = document.querySelector('.blank-input');
-            if (blankInput && blankInput.value.trim()) {
-                userAnswer = blankInput.value.trim();
-                
-                // 정답이 배열인지 확인하고 그에 맞게 처리
-                if (Array.isArray(currentQuestion.answer)) {
-                    isCorrect = currentQuestion.answer.some(answer => 
-                        userAnswer.trim().toLowerCase() === answer.trim().toLowerCase()
-                    );
-                } else {
-                    isCorrect = userAnswer.trim().toLowerCase() === currentQuestion.answer.trim().toLowerCase();
-                }
-                
-                // 답안 제출 상태 업데이트
-                isAnswerSubmitted = true;
-                blankInput.disabled = true;
-            } else {
-                showMessage('빈칸을 채워주세요!', 'warning');
-                return;
-            }
-            break;
+        
             
         case 'essay':
             const essayInput = document.querySelector('.essay-input');
@@ -700,20 +637,7 @@ document.addEventListener('keydown', function(event) {
             return;
         }
         
-        // 빈칸 채우기 문제 처리
-        if (currentQuestion.type === 'fill-in-blank') {
-            const blankInput = document.querySelector('.blank-input');
-            if (!blankInput) return;
-            
-            if (isAnswerSubmitted) {
-                console.log('빈칸 채우기 답변 후 엔터키: 다음 문제로 이동');
-                showNextQuestion();
-            } else {
-                console.log('빈칸 채우기 엔터키: 답안 제출');
-                handleSubmit();
-            }
-            return;
-        }
+        
 
         // 서술형 문제 처리
         if (currentQuestion.type === 'essay') {

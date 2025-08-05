@@ -1,713 +1,363 @@
 const questions = [
-    // 1장 연습문제 - 객관식
     {
-        number: "04",
-        question: "운영체제의 구성 요소가 아닌 것은?",
-        options: ["유틸리티", "GUI", "드라이버", "커널"],
-        answer: "유틸리티",
-        chapter: "1장",
+        number: "1",
+        question: "네트워크에 대한 설명으로 가장 잘못된 것은?",
+        options: [
+            "하나의 네트워크에 다수의 네트워크를 연결함으로써 음성, 오디오, 영상, 데이터 등도 전송할 수 있다.",
+            "대역폭은 네트워크를 통해 전송되는 데이터의 최소 전송단위이다.",
+            "통신 설비로 두 대 이상의 컴퓨터를 서로 연결한 것을 말한다.",
+            "모뎀이나 LAN, 케이블, 무선매체 등 통신 설비를 갖춘 컴퓨터로 서로 연결하는 조직이나 체계, 통신망이다."
+        ],
+        answer: "대역폭은 네트워크를 통해 전송되는 데이터의 최소 전송단위이다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
-        number: "05",
-        question: "나머지 셋과 종류가 다른 것은?",
-        options: ["드라이버", "GUI", "셸", "명령 프롬프트"],
-        answer: "드라이버",
-        chapter: "1장",
+        number: "2",
+        question: "다수의 컴퓨터를 네트워크로 연결했을 때 얻을 수 있는 장점으로 거리가 먼 것은?",
+        options: [
+            "손쉬운 백업",
+            "능률적인 통신",
+            "주변장치 공유",
+            "데이터 독점"
+        ],
+        answer: "데이터 독점",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
-        number: "06",
-        question: "운영체제의 핵심 기능을 모아 놓은 것은?",
-        options: ["유틸리티", "사용자 인터페이스", "디바이스 드라이버", "커널"],
-        answer: "커널",
-        chapter: "1장",
+        number: "3",
+        question: "패킷에 대한 설명으로 잘못된 것은?",
+        options: [
+            "헤더는 데이터의 형태와 데이터의 송수신지, 일련번호 등으로 구성된다.",
+            "제어 요소는 실제 전송데이터를 포함하는 부분이다.",
+            "네트워크를 통해 한 컴퓨터에서 다른 컴퓨터로 데이터를 패킷으로 분할해야 한다.",
+            "패킷은 헤더, 페이로드, 제어 요소 등을 포함하는 데이터 세그먼트이다."
+        ],
+        answer: "제어 요소는 실제 전송데이터를 포함하는 부분이다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
-        number: "09",
-        question: "키보드와 모니터가 발명되면서 실현 가능하게 된 시스템은?",
-        options: ["대화형 시스템", "일괄 작업 시스템", "시분할 시스템", "실시간 시스템"],
-        answer: "대화형 시스템",
-        chapter: "1장",
+        number: "4",
+        question: "현재 사용하고 있는 컴퓨터의 IP 주소를 확인하고 싶을 때 사용하는 네트워크 명령어로 올바른 것은?",
+        options: [
+            "ipconfig",
+            "netuser",
+            "hostname",
+            "ping"
+        ],
+        answer: "ipconfig",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
-        number: "10",
-        question: "CPU 시간을 잘게 나누어 여러 프로그램이 동시에 실행되는 것처럼 보이는 시스템은?",
-        options: ["hard wiring system", "batch job system", "time sharing system", "real-time system"],
-        answer: "time sharing system",
-        chapter: "1장",
+        number: "5",
+        question: "웹 사이트의 IP 주소를 확인할 수 있는 네트워크 명령어로 올바른 것은?(2개)",
+        options: [
+            "mac 도메인명",
+            "arp 도메인명",
+            "tracert 도메인명",
+            "ping 도메인명"
+        ],
+        answer: ["tracert 도메인명", "ping 도메인명"],
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
-        number: "12",
-        question: "언제 어디서나 컴퓨팅 파워나 소프트웨어에 접근할 수 있는 유연한 컴퓨터 환경을 위해 고안된 시스템은?",
-        options: ["real-time system", "cloud computing", "P2P system", "Internet of Things"],
-        answer: "cloud computing",
-        chapter: "1장",
+        number: "6",
+        question: "네트워크에서 이용 가능한 최대 전송속도로 정보를 전송할 수 있는 단위 시간당 전송량으로 올바른 것은?",
+        options: [
+            "주파수",
+            "바이트",
+            "대역폭",
+            "클록"
+        ],
+        answer: "대역폭",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
-        number: "13",
-        question: "사용자가 커널에 진입할 수 있는 유일한 수단은?",
-        options: ["시스템 호출", "사용자 정의 함수", "디바이스 드라이버", "사용자 인터페이스"],
-        answer: "시스템 호출",
-        chapter: "1장",
+        number: "7",
+        question: "LAN에 대한 설명으로 가장 거리가 먼 것은?",
+        options: [
+            "ISP가 제공하는 서비스를 사용하여 구축된 네트워크이다.",
+            "건물 안이나 특정 지역을 범위로 하는 네트워크이다.",
+            "LAN은 연결하는 거리가 짧은 만큼 WAN보다 신호가 약해지거나 오류가 발생할 확률이 높다.",
+            "유선 케이블, 적외선 링크, 무선 송수신기 등을 이용하여 통신한다."
+        ],
+        answer: "LAN은 연결하는 거리가 짧은 만큼 WAN보다 신호가 약해지거나 오류가 발생할 확률이 높다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
-        number: "14",
-        question: "응용 프로그램이 자신과 연관된 프로그램을 만들 수 있도록 제공하는 인터페이스는?",
-        options: ["interface", "API", "shell", "kernel"],
-        answer: "API",
-        chapter: "1장",
+        number: "8",
+        question: "스위칭 허브에 대한 설명으로 잘못된 것은?",
+        options: [
+            "노드들을 각각 점대점으로 접속하기 때문에 네트워크의 효율이 훨씬 낮다.",
+            "여러 대의 컴퓨터를 손쉽게 연결하는 장치이다.",
+            "전체 대역폭을 각 컴퓨터 노드 수만큼 나눠서 사용하는 문제점을 해결한 접속장치이다.",
+            "단순히 전송하는 기능을 넘어 수신지 주소로 스위칭하는 기능이 있다."
+        ],
+        answer: "노드들을 각각 점대점으로 접속하기 때문에 네트워크의 효율이 훨씬 낮다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
-        number: "15",
-        question: "프로그램 개발자를 위해 API, 코드 편집기, 에뮬레이터 같은 각종 개발용 응용 프로그램까지 하나로 묶어서 배포하는 개발 툴은?",
-        options: ["SDK", "시스템 호출", "드라이버", "커널"],
-        answer: "SDK",
-        chapter: "1장",
-        type: "multiple-choice"
-    },
-    {
-        number: "16",
-        question: "커널과 하드웨어의 인터페이스를 가리키는 것은?",
-        options: ["SDK", "system call", "driver", "API"],
-        answer: "driver",
-        chapter: "1장",
-        type: "multiple-choice"
-    },
-    {
-        number: "18",
-        question: "비슷한 기능을 가진 모듈을 묶어서 하나의 계층으로 만들고, 계층 간 통신을 통해 운영체제를 구현하는 방식의 커널은?",
-        options: ["micro architecture kernel", "wide architecture kernel", "layered architecture kernel", "monolithic architecture kernel"],
-        answer: "layered architecture kernel",
-        chapter: "1장",
-        type: "multiple-choice"
-    },
-    {
-        number: "20",
-        question: "서로 다른 운영체제에서 동일한 작업 환경을 만들어 주는 것은?",
-        options: ["객체지향", "컴파일러", "가상머신", "인터프리터"],
-        answer: "가상머신",
-        chapter: "1장",
-        type: "multiple-choice"
-    },
-
-    // 1장 연습문제 - 주관식 (빈칸 채우기)
-    {
-        number: "21",
-        question: "(   _____     )는 컴퓨터 전체를 관리하고 운영하는 소프트웨어다.",
-        answer: "운영체제",
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "23",
-        question: "(    _____      )은 CPU 성능이 낮고 메모리 크기가 작은 기계에 탑재된 컴퓨터다.",
-        answer: ["임베디드 컴퓨터", "임베디드 시스템", "임베디드컴퓨터", "임베디드시스템"],
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "26",
-        question: "(    _____     )은 운영체제의 핵심 기능을 모아 놓은 것이다.",
-        answer: "커널",
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "29",
-        question: "(   _____    )은 키보드와 모니터가 발명되면서 실현 가능하게 된 시스템이다.",
-        answer: ["대화형 시스템", "대화형시스템"],
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "30",
-        question: "(  _____   )은 CPU 시간을 잘게 나누어 여러 프로그램이 동시에 실행되는 것처럼 보이는 시스템이다.",
-        answer: ["시분할 시스템", "시분할시스템"],
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "33",
-        question: "사용자가 자발적으로 커널에 진입할 수 있는 유일한 방법은 (   _____   )뿐이다.",
-        answer: ["시스템 호출", "시스템호출"],
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "34",
-        question: "(    _____   )는 응용 프로그램이 자신과 연관된 프로그램을 만들 수 있도록 제공하는 인터페이스다.",
-        answer: ["API", "api"],
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "37",
-        question: "(     _____    )은 핵심 기능을 구현하는 모듈이 구분 없이 하나로 구성된 커널이다.",
-        answer: ["단일형 구조 커널", "단일형구조커널", "단일형"],
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "38",
-        question: "(   _____   )은 비슷한 기능을 가진 모듈을 묶어서 하나의 계층으로 만들고, 계층 간의 통신을 통해 운영체제를 구현하는 방식의 커널이다.",
-        answer: ["계층형 구조 커널", "계층형구조커널", "계층형"],
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "39",
-        question: "(    _____    )은 프로세스 관리, 메모리 관리, 프로세스 간 통신 관리 등 가장 기본 기능만 제공하는 커널이다.",
-        answer: ["마이크로 구조 커널", "마이크로구조커널", "마이크로형"],
-        chapter: "1장",
-        type: "fill-in-blank"
-    },
-
-    // 1장 연습문제 - 서술형
-    {
-        number: "42",
-        question: "시분할 시스템에 대하여 설명하시오.",
-        answer: "CPU로 여러 작업을 동시에 실행하는 기술인 멀티프로그래밍 기술을 통해 CPU 사용 시간을 잘게 쪼개어 여러 작업에 나누어 줌으로써 모든 작업을 동시에 처리하는 것처럼 보이게 하는 것.",
-        chapter: "1장",
-        type: "essay"
-    },
-
-    // 3장 연습문제 - 객관식
-    {
-        number: "01",
-        question: "실행을 위해 메모리에 올라온 동적인 상태를 가리키는 것은?",
-        options: ["소스코드", "프로세스", "프로그램", "PCB"],
-        answer: "프로세스",
-        chapter: "3장",
-        type: "multiple-choice"
-    },
-    {
-        number: "02",
-        question: "프로세스를 실행하는 데 필요한 정보를 보관하는 자료구조는?",
-        options: ["stack", "PC", "queue", "PCB"],
-        answer: "PCB",
-        chapter: "3장",
-        type: "multiple-choice"
-    },
-    {
-        number: "03",
-        question: "프로세스가 CPU를 할당받기 전에 기다리는 상태는?",
-        options: ["실행 상태", "준비 상태", "대기 상태", "생성 상태"],
-        answer: "준비 상태",
-        chapter: "3장",
-        type: "multiple-choice"
-    },
-    {
-        number: "04",
-        question: "실행 상태의 프로세스가 입출력을 요구하면 이동하는 상태는?",
-        options: ["완료 상태", "준비 상태", "대기 상태", "생성 상태"],
-        answer: "대기 상태",
-        chapter: "3장",
-        type: "multiple-choice"
-    },
-    {
-        number: "05",
-        question: "대기 상태의 프로세스가 입출력이 완료되면 이동하는 상태는?",
-        options: ["실행 상태", "준비 상태", "완료 상태", "생성 상태"],
-        answer: "준비 상태",
-        chapter: "3장",
-        type: "multiple-choice"
-    },
-    {
-        number: "06",
-        question: "실행 상태의 프로세스가 작업이 안 끝났음에도 타임 슬라이스 아웃이 걸려 이동하게 되는 상태는?",
-        options: ["완료 상태", "준비 상태", "대기 상태", "생성 상태"],
-        answer: "준비 상태",
-        chapter: "3장",
-        type: "multiple-choice"
-    },
-    {
-        number: "09",
-        question: "두 프로세스의 PCB를 교환하고 작업 환경을 바꾸는 작업은?",
-        options: ["활성 상태", "다단계 큐", "다중 인스턴스", "문맥 교환"],
-        answer: "문맥 교환",
-        chapter: "3장",
+        number: "9",
+        question: "라우터에 대한 설명으로 잘못된 것은?",
+        options: [
+            "라우팅은 라우터에 있는 라우팅 테이블이 결정한다.",
+            "오류 패킷의 폐기 기능과 혼잡을 제어하는 기능이 없다.",
+            "서로 다른 네트워크 간에 통신하는 데 사용하는 장치이다.",
+            "효율적인 경로를 선택하는 라우팅 테이블이 결정한다."
+        ],
+        answer: "오류 패킷의 폐기 기능과 혼잡을 제어하는 기능이 없다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "10",
-        question: "타임 슬라이스의 크기를 정할 때 기준이 되는 것은?",
-        options: ["문맥 교환", "다단계 큐", "다중 인스턴스", "활성 상태"],
-        answer: "문맥 교환",
-        chapter: "3장",
+        question: "트리형 접속 형태에 대한 설명으로 잘못된 것은?",
+        options: [
+            "여러 컴퓨터를 분리하거나 우선순위를 부여할 수 있다.",
+            "각 장비 간의 데이터 전송 거리를 늘릴 수 있다.",
+            "제어가 간단하여 관리나 네트워크 확장이 쉽다.",
+            "중앙에 트래픽이 집중되는 병목현상이 발생하지 않는다."
+        ],
+        answer: "중앙에 트래픽이 집중되는 병목현상이 발생하지 않는다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "11",
-        question: "유닉스에서 프로세스 번호 1번이면서 모든 프로세스의 최고 조상에 해당하는 프로세스의 이름은?",
-        options: ["init", "login", "shell", "swapper"],
-        answer: "init",
-        chapter: "3장",
+        question: "다음 중 유선 전송 매체의 종류로 잘못된 것은?",
+        options: [
+            "광섬유케이블",
+            "라디오파",
+            "꼬임선",
+            "동축케이블"
+        ],
+        answer: "라디오파",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "12",
-        question: "새로운 프로세스를 생성하는 함수는?",
-        options: ["wait()", "fork()", "exit()", "exec()"],
-        answer: "fork()",
-        chapter: "3장",
+        question: "UTP 카테고리 5에 해당되는 전송속도로 올바른 것은?",
+        options: [
+            "10Mbps",
+            "4Mbps",
+            "100Mbps",
+            "16Mbps"
+        ],
+        answer: "100Mbps",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "13",
-        question: "프로세스는 그대로 놔둔 채 코드를 바꾸는 함수는?",
-        options: ["wait()", "fork()", "exit()", "exec()"],
-        answer: "exec()",
-        chapter: "3장",
+        question: "무선 주파수 대역인 초단파 파장을 나타내는 약어로 올바른 것은?",
+        options: [
+            "SHF",
+            "LF",
+            "VLF",
+            "VHF"
+        ],
+        answer: "VHF",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "14",
-        question: "프로세스의 재사용과 가장 연관이 깊은 함수는?",
-        options: ["wait()", "fork()", "exit()", "exec()"],
-        answer: "exec()",
-        chapter: "3장",
+        question: "(IPv4) LAN에서 통신하는 방식으로 가장 거리가 먼 것은?",
+        options: [
+            "유니캐스트",
+            "브로드캐스트",
+            "애니캐스트",
+            "멀티캐스트"
+        ],
+        answer: "애니캐스트",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "15",
-        question: "자식 프로세스가 종료되기 전에 부모 프로세스가 먼저 종료되면 자식 프로세스는 어떤 프로세스가 되는가?",
-        options: ["init 프로세스", "zombi 프로세스", "orphan 프로세스", "swapper 프로세스"],
-        answer: "orphan 프로세스",
-        chapter: "3장",
+        question: "반이중 통신에 대한 설명으로 잘못된 것은?",
+        options: [
+            "송신 측과 수신 측이 미리 고정되어 있다.",
+            "휴대용 무전기와 모뎀을 이용한 데이터통신이 해당한다.",
+            "통신채널에 접속한 두 대의 단말기 중 어느 한쪽이 데이터를 송신하면 상대방은 수신만 할 수 있다.",
+            "하나의 통신채널을 이용하여 교대로 데이터를 송수신할 수 있다."
+        ],
+        answer: "송신 측과 수신 측이 미리 고정되어 있다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "16",
-        question: "자식 프로세스가 종료되었는데도 부모가 뒤처리를 하지 않으면 자식 프로세스는 어떤 프로세스가 되는가?",
-        options: ["init 프로세스", "좀비 프로세스", "고아 프로세스", "swapper 프로세스"],
-        answer: "좀비 프로세스",
-        chapter: "3장",
+        question: "비트 지향 동기화 기법에 대한 설명으로 잘못된 것은?",
+        options: [
+            "데이터 블록의 처음과 끝에 8비트의 플래그 비트를 표시하여 동기를 맞추는 방식이다.",
+            "비트 지향 동기화 기법은 데이터의 시작과 끝을 알리는 시작 플래그로 시작해서 종료 플래그로 끝난다.",
+            "전송하는 모든 데이터 단위를 일련의 비트로 처리함으로써 동기화에 필요한 데이터까지 비트로 표현한다.",
+            "사용하는 동기 문자에는 SYN, 문장의 시작을 알리는 STX, 문장의 끝을 알리는 ETX등 이 있다."
+        ],
+        answer: "사용하는 동기 문자에는 SYN, 문장의 시작을 알리는 STX, 문장의 끝을 알리는 ETX등 이 있다.",
+        chapter: "네트워크",
+        type: "multiple-choice"
+    },
+    {
+        number: "17",
+        question: "홀수 패리티 검사 방식을 적용한 예로 올바른 것은?",
+        options: [
+            "00011000",
+            "10010001",
+            "11001100",
+            "10101010"
+        ],
+        answer: "10010001",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "18",
-        question: "코드에 정의된 절차에 따라 CPU에 작업을 요청하는 실행 단위는?",
-        options: ["태스크", "작업", "프로세스", "스레드"],
-        answer: "스레드",
-        chapter: "3장",
+        question: "10Base-2의 설명으로 잘못된 것은?",
+        options: [
+            "전송매체로 얇은 동축케이블을 사용하는 이터넷 구성 방식이다.",
+            "설치가 용이하고 설치비용이 저렴하다.",
+            "브로드밴드 방식을 사용한다.",
+            "10Base-5와 성능이 같고 한세그먼트의 최장거리는 200m이다."
+        ],
+        answer: "브로드밴드 방식을 사용한다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
     {
         number: "19",
-        question: "멀티스레드의 장점이 아닌 것은?",
-        options: ["스레드끼리 독립적이라 영향을 받지 않는다.", "응답 속도가 빨라진다.", "프로세스에 비하여 통신 오버헤드가 적다.", "시스템 자원을 공유한다."],
-        answer: "스레드끼리 독립적이라 영향을 받지 않는다.",
-        chapter: "3장",
+        question: "CSMA/CD방식에 대한 설명으로 잘못된 것은?",
+        options: [
+            "전송 지연으로 인한거리에 제약이 없이 리피터가 필요 없다.",
+            "OSI 참조모델의 데이터링크 계층에 대항하는 LLC계층으로부터 데이터 송신요구를 받은MAC계층은 매체가 비어있는지 반송파로 확인하여 비어있으면 데이터를 송신한다.",
+            "보통 버스형과 트리형 접속형태의 LAN에 많이 사용한다.",
+            "여러 컴퓨터가 동시에 데이터를 전송할 때는 전송 매체의 충돌 발생 여부를 조사하여 충 돌이 감지되면 데이터 전송을 중지하고 모든 컴퓨터에 잼신호를 송신하여 충돌 사실을 알린다."
+        ],
+        answer: "전송 지연으로 인한거리에 제약이 없이 리피터가 필요 없다.",
+        chapter: "네트워크",
         type: "multiple-choice"
     },
-
-    // 3장 연습문제 - 주관식 (빈칸 채우기)
+    {
+        number: "20",
+        question: "패킷 교환방식에 대한 설명으로 잘못된 것은?",
+        options: [
+            "전송이 없는 상태에서도 회신을 점유하는 회선교환방식에 비해 전송효율이 높다.",
+            "데이터를 전송할 때 과부하가 생기면 전송 지연이 발생한다.",
+            "우선순위가 높은 패킷을 먼저 전송할 수 없다.",
+            "처리 속도가 다른 통신 기기 간에도 정보를 전송할 수 있다."
+        ],
+        answer: "우선순위가 높은 패킷을 먼저 전송할 수 없다.",
+        chapter: "네트워크",
+        type: "multiple-choice"
+    },
     {
         number: "21",
-        question: "프로세스 제어 블록(PCB)은 (      _____      ) 영역에 만들어진다.",
-        answer: "운영체제",
-        chapter: "3장",
-        type: "fill-in-blank"
+        question: "OSI 참조모델의 계층으로 잘못된 것은?",
+        options: [
+            "전송계층",
+            "물리계층",
+            "분석계층",
+            "데이터링크계층"
+        ],
+        answer: "분석계층",
+        chapter: "네트워크",
+        type: "multiple-choice"
     },
     {
         number: "22",
-        question: "메모리에 있는 프로세스는 코드, 데이터, (       _____       ) 영역으로 나뉜다.",
-        answer: "스택",
-        chapter: "3장",
-        type: "fill-in-blank"
+        question: "OSI 참조모델의 데이터 전송에 대한 설명으로 잘못된 것은?",
+        options: [
+            "송신 측이 헤더를 생성하여 추가하면 수신 측에서 해당 계층이 이 헤더를 사용한다.",
+            "상위 계층이나 하위계층 사이에 주고받은 것을 프로토콜 데이터 단위(PDU)라고 한다.",
+            "각 계층은 헤더와 데이터 단위로 정의되는데, 헤더에는 각 계층의 기능과 관련된 정보가 포함된다.",
+            "데이터 단위는 상위 계층에서 전송을 원하는 데이터인 SDU에 제어 정보인 PCI를 추가한 것으로, 제어 정보에는 흐름제어 정보, 오류 제어 정보, 주소 정보 등이 포함된다."
+        ],
+        answer: "상위 계층이나 하위계층 사이에 주고받은 것을 프로토콜 데이터 단위(PDU)라고 한다.",
+        chapter: "네트워크",
+        type: "multiple-choice"
     },
     {
         number: "23",
-        question: "프로세스 상태 중 (      _____       ) 상태는 프로세스가 CPU를 할당받기 전에 기다리는 상태다.",
-        answer: "준비",
-        chapter: "3장",
-        type: "fill-in-blank"
+        question: "물리계층에 대한 설명으로 잘못된 것은?",
+        options: [
+            "네트워크의 두 노드를 물리적으로 연결해주는 신호 방식등을 다룬다.",
+            "데이터링크계층에서 한 단위의 데이터를 받고 통신 링크를 따라 전송할 수 있는 형태로 변환한다.",
+            "물리계층은 물리적매체를 통해 비트흐름을 전송하는데 필요한 기능을 조정한다.",
+            "송신측의 물리계층은 데이터링크 계층에서 전기신호를 받아 0과1로 구성된 비트열의 데이터로 변환한 후 전송 매체를 통해 수신 측에 보낸다."
+        ],
+        answer: "송신측의 물리계층은 데이터링크 계층에서 전기신호를 받아 0과1로 구성된 비트열의 데이터로 변환한 후 전송 매체를 통해 수신 측에 보낸다.",
+        chapter: "네트워크",
+        type: "multiple-choice"
     },
     {
         number: "24",
-        question: "프로세스 상태 중 (        _____      ) 상태는 컴퓨터의 효율성을 높이기 위하여 만들어진 상태다.",
-        answer: "대기",
-        chapter: "3장",
-        type: "fill-in-blank"
+        question: "데이터링크계층에 대한 설명으로 잘못된 것은?",
+        options: [
+            "응용계층에서 데이터 단위를 받아 주소와 제어 정보 같은 의미있는 비트를 시작 부분(이더넷 헤더)과 끝부분(트레일러)에 추가한다.",
+            "네트워크를 통해 데이터를 전송할 때 전송로 역할을 한다.",
+            "물리적 링크를 이용하여 신뢰성 있는 데이터를 전송하는 계층이다.",
+            "물리계층에서 발생할 수 있는 오류를 검출하고 복구하는 오류 제어기능, 동기화, 흐름제어 등을 담당한다."
+        ],
+        answer: "응용계층에서 데이터 단위를 받아 주소와 제어 정보 같은 의미있는 비트를 시작 부분(이더넷 헤더)과 끝부분(트레일러)에 추가한다.",
+        chapter: "네트워크",
+        type: "multiple-choice"
     },
     {
         number: "25",
-        question: "프로세스 상태 중 (     _____         ) 상태는 실행 상태의 프로세스가 입출력을 요구하면 이동하는 상태다.",
-        answer: "대기",
-        chapter: "3장",
-        type: "fill-in-blank"
+        question: "스위치에 대한 설명으로 잘못된 것은?",
+        options: [
+            "스위치는 데이터링크계층에서 동작하고 스위칭허브 또는 레이어2 스위치라고 부른다.",
+            "회선 하나를 송신과 수신이 번갈아가면서 사용하는 반이중 통신 방식이다.",
+            "스위치는 충돌 도메인의 범위가 좁다.",
+            "허브와 달리 데이터 충돌이 발생하지 않는다."
+        ],
+        answer: "회선 하나를 송신과 수신이 번갈아가면서 사용하는 반이중 통신 방식이다.",
+        chapter: "네트워크",
+        type: "multiple-choice"
     },
     {
-        number: "26",
-        question: "프로세스 상태 중 (       _____       ) 상태는 대기 상태의 프로세스가 입출력이 완료되면 이동하는 상태다.",
-        answer: "준비",
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "27",
-        question: "프로세스 상태 중 (       _____       ) 상태는 실행 상태의 프로세스가 작업이 안 끝났음에도 타임 슬라이스 아웃이 걸려 이동하게 되는 상태다.",
-        answer: "준비",
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "30",
-        question: "(       _____     )은 두 프로세스의 PCB를 교환하고 작업 환경을 바꾸는 작업이다.",
-        answer: ["문맥 교환", "문맥교환"],
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "33",
-        question: "유닉스에서 프로세스 번호 1번이면서 모든 프로세스의 최고 조상 프로세스에 해당하는 프로세스의 이름은 (    _____          )이다.",
-        answer: ["init 프로세스", "init프로세스", "init"],
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "34",
-        question: "(      _____        )는 새로운 프로세스를 생성하는 함수다.",
-        answer: "fork()",
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "35",
-        question: "(      _____        )는 프로세스는 그대로 놔둔 채 코드를 바꾸는 함수다.",
-        answer: "exec()",
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "36",
-        question: "(        _____     )는 다중 인스턴스를 만들 때 사용하는 함수다.",
-        answer: "fork()",
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "37",
-        question: "(      _____        )는 프로세스의 재사용과 가장 연관이 깊은 함수다.",
-        answer: "exec()",
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "41",
-        question: "자식 프로세스가 종료되기 전에 부모 프로세스가 먼저 종료되면 자식 프로세스는 (    _____          )가 된다.",
-        answer: ["고아 프로세스", "고아프로세스", "orphan 프로세스", "orphan프로세스"],
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "42",
-        question: "자식 프로세스가 종료되었는데도 부모가 뒤처리를 하지 않으면 자식 프로세스는 (   _____           )가 된다.",
-        answer: ["좀비 프로세스", "좀비프로세스", "zombi 프로세스", "zombiprocess"],
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "43",
-        question: "fork() 이후에 부모 프로세스에 wait()가 없으면 (    _____          ) 프로세스가 만들어진다.",
-        answer: ["좀비 프로세스", "좀비프로세스", "zombi 프로세스", "zombiprocess", "좀비"],
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "46",
-        question: "(     _____         )는 프로그램이 실행을 위해 메모리에 올라온 동적 상태를 말한다.",
-        answer: "프로세스",
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "47",
-        question: "(     _____          )는 프로세스를 실행하는 데 필요한 정보를 보관하는 자료구조다.",
-        answer: ["프로세스 제어 블록(PCB, process control block)", "프로세스제어블록(PCB, process control block)", "process control block(PCB)", "pcb"],
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "50",
-        question: "(       _____       )는 정의된 절차에 따라 CPU에 작업을 요청하는 실행 단위를 말한다.",
-        answer: "스레드",
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "51",
-        question: "(     _____         )는 프로세스에서 자원을 공유하고 실행 단위만 여러 개 만드는 것을 말한다.",
-        answer: ["멀티스레드", "멀티 스레드"],
-        chapter: "3장",
-        type: "fill-in-blank"
-    },
-
-    // 3장 연습문제 - 서술형
-    {
-        number: "54",
-        question: "PCB에 대하여 설명하시오.",
-        answer: "프로세스 제어 블록(PCB, Process Control Block)은 프로세스를 실행하기 위한 프로세스 구분자, 메모리 관련 정보, 프로그램 카운터와 각종 레지스터 같은 중간값을 관리하고 보관하는 데이터 구조이다. 프로그램이 프로세스가 되려면 메모리에 올라오는 것과 동시에 프로세스 제어 블록이 생성되어야 한다.",
-        chapter: "3장",
+        number: "주관식 1",
+        question: "네트워크를 통해 데이터를 전송할 때 데이터가 전송되는 기본단위는?",
+        answer: "패킷",
+        chapter: "네트워크",
         type: "essay"
     },
     {
-        number: "55",
-        question: "프로세스의 다섯 가지 상태에 대하여 설명하시오.",
-        answer: "프로세스의 다섯 가지 상태로는 생성, 준비, 실행, 대기, 완료가 있다. 프로그램이 프로세스가 되며 PCB가 생성되는 생성 상태, 생성된 프로세스가 CPU 자원을 받기 위해 기다리는 준비 상태, 프로세스가 CPU 자원을 할당받아 작업을 수행하는 실행 상태, 입출력 등의 이유로 잠시 기다리는 대기 상태, 작업이 완료되어 PCB가 폐기되는 완료 상태가 있다.",
-        chapter: "3장",
-        type: "essay"
-    },
-
-    // 4장 연습문제 - 객관식
-    {
-        number: "04",
-        question: "비선점형 스케줄링과 비교한 선점형 스케줄링에 대한 설명으로 옳지 않은 것은?",
-        options: ["비선점형에 비하여 우선순위가 낮다", "실행 상태에 있는 작업을 중단시키고 새로운 작업을 실행할 수 있다.", "문맥 교환의 오버헤드가 많다.", "시분할 방식 스케줄러에 사용된다."],
-        answer: "비선점형에 비하여 우선순위가 낮다",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "05",
-        question: "나머지 3개와 비교하여 우선순위가 높은 프로세스는?",
-        options: ["일괄 처리 프로세스", "사용자 프로세스", "커널 프로세스", "CPU 집중 프로세스"],
-        answer: "커널 프로세스",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "06",
-        question: "준비 큐에 도착한 순서대로 CPU를 할당하는 비선점형 방식의 스케줄링 알고리즘은?",
-        options: ["최고 응답률 우선(HRN)", "최단 작업 우선(SJF)", "최소 잔류 시간 우선(SRT)", "선입선출(FCFS)"],
-        answer: "선입선출(FCFS)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "07",
-        question: "준비 큐에 있는 프로세스 중에서 실행 시간이 가장 짧은 작업부터 CPU를 할당하는 비선점형 방식의 스케줄링 알고리즘은?",
-        options: ["최고 응답률 우선(HRN)", "최단 작업 우선(SJF)", "최소 잔류 시간 우선(SRT)", "선입선출(FCFS)"],
-        answer: "최단 작업 우선(SJF)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "08",
-        question: "아사 현상이 발생할 수 있는 비선점형 방식의 스케줄링 알고리즘은?",
-        options: ["최고 응답률 우선(HRN)", "최단 작업 우선(SJF)", "최소 잔류 시간 우선(SRT)", "선입선출(FCFS)"],
-        answer: "최단 작업 우선(SJF)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "09",
-        question: "서비스를 받기 위해 기다린 시간과 CPU 사용 시간을 고려하여 스케줄링하는 비선점형 알고리즘은?",
-        options: ["최고 응답률 우선(HRN)", "다단계 피드백 큐(MLFQ)", "최소 잔류 시간 우선(SRT)", "선입선출(FCFS)"],
-        answer: "최고 응답률 우선(HRN)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "10",
-        question: "선점형 알고리즘이 아닌 것은?",
-        options: ["다단계 큐(MLQ)", "다단계 피드백 큐(MLFQ)", "라운드 로빈(RR)", "최단 작업 우선(SJF)"],
-        answer: "최단 작업 우선(SJF)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "11",
-        question: "아사 현상을 완화하는 방법은?",
-        options: ["사이클 훔치기", "에이징", "작업 훔치기", "우선순위"],
-        answer: "에이징",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "12",
-        question: "선입선출(FCFS) 스케줄링과 유사하지만, 각 프로세스마다 CPU를 사용할 수 있는 타임 슬라이스가 있으며 우선순위가 없는 알고리즘은?",
-        options: ["다단계 큐(MLQ)", "다단계 피드백 큐(MLFQ)", "라운드 로빈(RR)", "최단 작업 우선(SJF)"],
-        answer: "라운드 로빈(RR)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "13",
-        question: "문맥 교환 시간을 소비하는 알고리즘은?",
-        options: ["최고 응답률 우선(HRN)", "최단 작업 우선(SJF)", "다단계 큐(MLQ)", "선입선출(FCFS)"],
-        answer: "다단계 큐(MLQ)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "14",
-        question: "기본적으로 라운드 로빈 스케줄링을 사용하지만, CPU를 할당받을 프로세스를 선택할 때 남은 작업 시간이 가장 적은 프로세스를 선택하는 알고리즘은?",
-        options: ["최고 응답률 우선(HRN)", "다단계 피드백 큐(MLFQ)", "최소 잔류 시간 우선(SRT)", "선입선출(FCFS)"],
-        answer: "최소 잔류 시간 우선(SRT)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "16",
-        question: "우선순위에 따라 여러 개의 큐를 사용하는 알고리즘 중 고정 우선순위 방식은?",
-        options: ["선입선출(FCFS)", "다단계 피드백 큐(MLFQ)", "다단계 큐(MLQ)", "최고 응답률 우선(HRN)"],
-        answer: "다단계 큐(MLQ)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    {
-        number: "18",
-        question: "우선순위에 따라 여러 개의 큐를 사용하고 각 큐의 타임 슬라이스 크기가 다른 변동 우선순위 알고리즘은?",
-        options: ["선입선출(FCFS)", "다단계 피드백 큐(MLFQ)", "다단계 큐(MLQ)", "최고 응답률 우선(HRN)"],
-        answer: "다단계 피드백 큐(MLFQ)",
-        chapter: "4장",
-        type: "multiple-choice"
-    },
-    
-    // 4장 연습문제 - 주관식 (빈칸 채우기)
-    {
-        number: "24",
-        question: "비선점형과 선점형 스케줄링 중 실행 상태에 있는 작업을 중단시키고 새로운 작업을 실행할 수 있는 것은 (  _____            )이다.",
-        answer: ["선점형 스케줄링", "선점형", "선점"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "25",
-        question: "비선점형과 선점형 스케줄링 중 실행 상태에 있는 작업이 완료될 때까지 다른 작업이 불가능한 것은 (      _____        )이다.",
-        answer: ["비선점형 스케줄링", "비선점형", "비선점"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "26",
-        question: "입출력 집중 프로세스보다 CPU 집중 프로세스의 우선순위가 (       _____       ).",
-        answer: "낮다",
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "27",
-        question: "커널 프로세스의 우선순위가 사용자 프로세스보다 (       _____       ).",
-        answer: "높다",
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "28",
-        question: "후면 프로세스보다 전면 프로세스의 우선순위가 (         _____     ).",
-        answer: "높다",
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "29",
-        question: "일괄 처리 프로세스보다 대화형 프로세스의 우선순위가 (     _____         ).",
-        answer: "높다",
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "32",
-        question: "(       _____        ) 스케줄링은 콘보이 효과가 발생하는 스케줄링 알고리즘이다.",
-        answer: ["선입선출(FCFS)", "선입 선출", "선입선출", "fcfs"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "33",
-        question: "(      _____         ) 스케줄링은 준비 큐에 있는 프로세스 중에서 실행 시간이 가장 짧은 작업부터 CPU를 할당하는 비선점형 방식의 스케줄링 알고리즘이다.",
-        answer: ["최단 작업 우선(SJF)", "최단작업우선", "최단 작업 우선", "sjf"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "34",
-        question: "(      _____         )은 최단 작업 우선(SJF)과 같은 알고리즘에서 긴 작업이 계속 뒤로 밀리는 것을 말한다.",
-        answer: ["아사(starvation) 현상", "아사현상", "아사 현상", ],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "35",
-        question: "(     _____          ) 스케줄링은 서비스를 받기 위해 기다린 시간과 CPU 사용 시간을 고려하여 스케줄링하는 비선점형 알고리즘이다.",
-        answer: ["최고 응답률 우선(HRN)", "최고응답률우선", "최고 응답률 우선", "hrn"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "36",
-        question: "(     _____          ) 스케줄링은 선점형 알고리즘 중 우선순위가 적용되지 않는 가장 단순하고 대표적인 방식의 알고리즘이다.",
-        answer: ["라운드 로빈(RR)", "라운드 로빈", "라운드로빈"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "37",
-        question: "(  _____             )은 아사 현상을 완화하는 방법이다.",
-        answer: ["에이징(나이 먹기, aging)", "에이징", "나이 먹기", "aging"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "38",
-        question: "(    _____           ) 스케줄링은 선입선출(FCFS) 스케줄링과 유사하지만, 각 프로세스마다 CPU를 사용할 수 있는 타임 슬라이스가 있으며 우선순위가 없는 알고리즘이다.",
-        answer: ["라운드 로빈(RR)", "라운드 로빈", "라운드로빈"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "39",
-        question: "(     _____          ) 스케줄링은 최단 작업 우선(SJF)과 라운드 로빈(RR) 스케줄링을 혼합한 선점형 알고리즘이다.",
-        answer: ["최소 잔류 시간 우선(SRT)", "최소잔류시간우선", "최소 잔여 시간 우선", "srt"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "40",
-        question: "(     _____          ) 스케줄링은 우선순위에 따라 여러 개의 큐를 사용하는 알고리즘 중 고정 우선순위 방식의 알고리즘이다.",
-        answer: ["다단계 큐(MLQ)", "다단계큐", "다단계 큐", "mlq"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "41",
-        question: "(    _____           ) 스케줄링은 기본적으로 라운드 로빈 스케줄링을 사용하지만, CPU를 할당받을 프로세스를 선택할 때 남은 작업 시간이 가장 적은 프로세스를 선택하는 알고리즘이다.",
-        answer: ["최소 잔류 시간 우선(SRT)", "최소잔류시간우선", "최소 잔여 시간 우선", "srt"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    {
-        number: "42",
-        question: "(     _____          ) 스케줄링은 우선순위에 따라 여러 개의 큐를 사용하고 각 큐의 타임 슬라이스 크기가 다른 변동 우선순위 알고리즘이다.",
-        answer: ["다단계 피드백 큐(MLFQ)", "다단계피드백큐", "다단계 피드백 큐", "mlfq", "다단계피드백 큐"],
-        chapter: "4장",
-        type: "fill-in-blank"
-    },
-    
-    // 4장 연습문제 - 서술형
-    {
-        number: "48",
-        question: "최단 작업 우선(SJF) 스케줄링과 에이징에 대하여 설명하시오.",
-        answer: "최단 작업 우선순위(SJF) 스케줄링은 작업 시간이 짧은 프로세스에 우선순위를 두어 콘보이 효과를 완화할 수 있는 스케줄링 방식이다. SJF 스케줄링에서는 아사 현상이 발생할 수 있는데, 이를 해결하는 방법으로 에이징 방식을 사용한다. 에이징은 프로세스가 자신의 순서를 양보할 때마다 한 살식 먹으며, 프로세스가 양보할 수 있는 상한선에 도달했을 때 우선순위에 상관 없이 실행되는 것이다.",
-        chapter: "4장",
+        number: "주관식 2",
+        question: "동기식전송과 비동기식전송의 차이점을 설명하시오.",
+        answer: "동기식 전송은 데이터를 블록으로 묶어 한 번에 전송하는 방식이고, 비동기식 전송은 한 문자씩 보내는 방식이다.",
+        chapter: "네트워크",
         type: "essay"
     },
     {
-        number: "49",
-        question: "다단계 피드백 큐 스케줄링에 대하여 설명하시오.",
-        answer: "다단계 피드백 큐는 우선순위가 낮은 프로세스가 불리한 다단계 큐의 단점을 보완한 스케줄링 방식으로, 프로세스가 실행될 때마다 우선순위가 한 단계씩 낮아진다. 우선순위가 무한대로 낮아져 최하단 우선순위 단계에 도달하면 선입선출(FCFS) 스케줄링 방식으로 동작하여 무조건 프로세스가 실행되도록 한다.",
-        chapter: "4장",
+        number: "주관식 3",
+        question: "회선교환, 패킷교환, 메시지교환에 대해 특징을 중심으로 비교 설명하시오.",
+        answer: "회선교환은 전용선을 사용하는 것처럼 통신하며, 패킷교환은 데이터를 패킷 단위로 나누어 전송하고, 메시지교환은 메시지 단위로 저장 후 전송하는 방식이다.",
+        chapter: "네트워크",
+        type: "essay"
+    },
+    {
+        number: "주관식 4",
+        question: "OSI7 계층이 무엇이고 왜 필요한지 설명하시오.",
+        answer: "OSI 7 계층은 네트워크 통신을 7개의 계층으로 나눈 모델로, 통신 과정을 단계별로 파악하고 문제 해결을 용이하게 하기 위해 필요하다.",
+        chapter: "네트워크",
+        type: "essay"
+    },
+    {
+        number: "주관식 5",
+        question: "1바이트통신이다. 문자A를보내고자한다. 맨앞1비트를 홀수 패리티비트로 사용하고 생성다항식 G(x)=x4+x3+x2+1을 사용할 때 송신지에서 보내는 데이터 비트열은? (단, A는 10진수로 65)",
+        answer: "110000011101",
+        chapter: "네트워크",
         type: "essay"
     }
 ];
-
 export default questions;
