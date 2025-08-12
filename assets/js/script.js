@@ -24,135 +24,7 @@ let isAnswerSubmitted = false; // 답안 제출 상태 추가
 let isMultipleChoiceAnswered = false; // 객관식 답변 상태 추가
 let isEssayAnswerShown = false; // 서술형 정답 표시 상태 추가
 
-document.addEventListener('DOMContentLoaded', function() {
-    const selectionTypeFilter = document.getElementById('selection-type-filter');
-
-    // 주관식 옵션 추가 (기존 옵션이 있다면 그 뒤에 추가)
-    if (selectionTypeFilter) {
-        // 기존 옵션 확인
-        const hasEssayOption = Array.from(selectionTypeFilter.options)
-            .some(option => option.value === 'essay');
-
-        // 주관식 옵션이 없으면 추가
-        if (!hasEssayOption) {
-            const essayOption = document.createElement('option');
-            essayOption.value = 'essay';
-            essayOption.textContent = '주관식';
-            selectionTypeFilter.appendChild(essayOption);
-        }
-    }
-
-    incorrectQuestions = [];
-    isReviewMode = false;
-    quizStarted = false;
-
-    // 선택 화면 표시, 문제 화면 숨김
-    showSelectionScreen();
-
-    // 이벤트 리스너 등록
-    submitButton.addEventListener('click', handleSubmit);
-    showAnswerButton.addEventListener('click', showAnswer);
-    prevButton.addEventListener('click', showPreviousQuestion);
-    nextButton.addEventListener('click', showNextQuestion);
-    resetButton.addEventListener('click', resetQuiz);
-
-    // 키보드 이벤트 리스너 추가 - 엔터키 처리
-    document.addEventListener('keydown', function(event) {
-        if (!quizStarted) return; // 퀴즈가 시작되지 않았으면 무시
-
-        const currentQuestion = filteredQuestions[currentQuestionIndex];
-        if (!currentQuestion) return; // 현재 문제가 없으면 무시
-
-        // 숫자 키 1-4 처리 (객관식 문제일 때만)
-        if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
-            // 숫자 키 1-4 또는 키패드 1-4
-            if ((event.key >= '1' && event.key <= '4') || (event.code.startsWith('Numpad') && event.code.length === 7 && event.code[6] >= '1' && event.code[6] <= '4')) {
-                event.preventDefault();
-
-                // 키 값에서 숫자 추출 (1-4)
-                const num = event.code.includes('Numpad') ? event.code[6] : event.key;
-                const optionIndex = parseInt(num) - 1;
-
-                // 해당 번호의 체크박스 찾기
-                const checkboxes = document.querySelectorAll('input[name="option"]');
-                if (optionIndex >= 0 && optionIndex < checkboxes.length) {
-                    // 모든 체크박스 해제 후 선택한 옵션만 체크 (라디오 버튼처럼 동작)
-                    checkboxes.forEach((cb, idx) => {
-                        checkboxes[idx].checked = (idx === optionIndex);
-                    });
-
-                    // 포커스 설정
-                    checkboxes[optionIndex].focus();
-
-                    console.log(`숫자키 ${num} 입력: 옵션 ${optionIndex + 1} 선택됨`);
-
-                    // 자동으로 제출하기 (선택사항)
-                    // const submitButton = document.querySelector('.submit-button');
-                    // if (submitButton) {
-                    //     setTimeout(() => submitButton.click(), 100);
-                    // }
-                }
-            }
-        }
-
-        // 엔터키 처리
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault(); // 기본 동작 방지 (폼 제출 등)
-            console.log('엔터키 입력 감지');
-
-            // 현재 문제 가져오기
-            const currentQuestion = filteredQuestions[currentQuestionIndex];
-
-            // 객관식 문제 처리
-            if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
-                console.log('객관식 문제 제출');
-                const submitButton = document.querySelector('.submit-button');
-                if (submitButton) {
-                    submitButton.click();
-                }
-            }
-            // 서술형 문제 처리
-            else if (currentQuestion.type === 'essay') {
-                console.log('서술형 문제 처리');
-                // 이미 정답이 표시된 상태면 다음 문제로 이동
-                if (isEssayAnswerShown) {
-                    console.log('다음 문제로 이동');
-                    showNextQuestion();
-                }
-                // 아직 정답을 표시하지 않았으면 정답 표시
-                else {
-                    console.log('정답 표시');
-                    handleSubmit();
-                }
-            }
-            // 이미 답변이 제출된 객관식 문제인 경우 다음 문제로 이동
-            else if (isMultipleChoiceAnswered) {
-                console.log('다음 문제로 이동');
-                showNextQuestion();
-            }
-        }
-    });
-
-    // 시작 버튼 이벤트 리스너 추가
-    startButton.addEventListener('click', () => {
-        const selectedType = selectionTypeFilter.value;
-
-        if (selectedType === '선택하세요') {
-            showMessage('문제 유형을 선택해주세요.', 'warning');
-            return;
-        }
-
-        startQuiz('네트워크', selectedType);
-    });
-
-    if (selectionTypeFilter) {
-        selectionTypeFilter.addEventListener('change', () => {
-            // 필터가 변경될 때마다 문제 수 업데이트
-            filterQuestions('네트워크', selectionTypeFilter.value);
-        });
-    }
-});
-
+// Function Definitions
 // 선택 화면 표시 함수 (신규)
 function showSelectionScreen() {
     selectionContainer.style.display = 'block';
@@ -453,6 +325,28 @@ function showAnswer() {
             explanationDiv.innerHTML = `<h3>해설</h3><p>${currentQuestion.explanation.replace(/\n/g, '<br>')}</p>`;
             resultContainer.appendChild(explanationDiv);
         }
+    }
+}
+
+// 제출 처리 함수
+function handleSubmit() {
+    const currentQuestion = filteredQuestions[currentQuestionIndex];
+
+    if (currentQuestion.type === 'essay') {
+        const textarea = document.querySelector('.essay-answer');
+
+        // 텍스트 영역이 있으면 비활성화
+        if (textarea) {
+            textarea.disabled = true;
+        }
+
+        // 정답 표시
+        showAnswer();
+
+        // 상태 업데이트
+        isEssayAnswerShown = true;
+        isAnswerSubmitted = true;
+        updateButtonStates();
     }
 }
 
