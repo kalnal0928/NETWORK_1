@@ -278,7 +278,7 @@ function displayResult(isCorrect, userAnswer, correctAnswer) {
         resultText.innerHTML = `<p>오답입니다.</p><p>제출한 답: ${userAnswer}</p><p>정답: ${Array.isArray(correctAnswer) ? correctAnswer.join(', ') : correctAnswer}</p>`;
 
         // 오답 문제 저장 (중복 방지)
-        if (!incorrectQuestions.some(q => q.number === filteredQuestions[currentQuestionIndex].number)) {
+        if (!isReviewMode && !incorrectQuestions.some(q => q.number === filteredQuestions[currentQuestionIndex].number)) {
             incorrectQuestions.push(filteredQuestions[currentQuestionIndex]);
         }
     }
@@ -506,6 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('submit-button').addEventListener('click', handleSubmit);
     document.getElementById('show-answer-button').addEventListener('click', showAnswer);
     document.getElementById('reset-button').addEventListener('click', resetQuiz);
+
 
     // 초기 화면
     showSelectionScreen();
