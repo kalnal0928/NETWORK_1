@@ -506,4 +506,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 초기 화면
     showSelectionScreen();
+
+    // 키보드 이벤트 리스너 추가
+    document.addEventListener('keydown', (event) => {
+        if (!quizStarted) return;
+
+        const currentQuestion = filteredQuestions[currentQuestionIndex];
+        if (!currentQuestion) return;
+
+        // 1, 2, 3, 4, 5 키로 객관식 선택
+        if (['1', '2', '3', '4', '5'].includes(event.key)) {
+            if (currentQuestion.type === 'multiple-choice' && !isMultipleChoiceAnswered) {
+                const optionIndex = parseInt(event.key) - 1;
+                const optionInput = document.getElementById(`option-${optionIndex}`);
+                if (optionInput) {
+                    optionInput.click();
+                }
+            }
+        }
+
+        // Enter 키로 제출 또는 다음 문제로 이동
+        if (event.key === 'Enter') {
+            event.preventDefault(); // 기본 동작 방지
+
+            const isMultipleChoice = currentQuestion.type === 'multiple-choice';
+            const isEssay = currentQuestion.type === 'essay';
+
+            // 답이 제출된 상태에서는 다음 문제로 이동
+            if (isAnswerSubmitted || isMultipleChoiceAnswered) {
+                if (!nextButton.disabled) {
+                    showNextQuestion();
+                }
+                return;
+            }
+
+            // 답이 제출되지 않은 상태
+            if (isMultipleChoice) {
+                const multiChoiceSubmitButton = questionContainer.querySelector('.submit-button');
+                if (multiChoiceSubmitButton) {
+                    multiChoiceSubmitButton.click();
+                }
+            } else if (isEssay) {
+                if (!submitButton.disabled) {
+                    handleSubmit();
+                }
+            }
+        }
+    });
 });
