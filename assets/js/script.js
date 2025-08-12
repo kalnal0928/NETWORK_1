@@ -90,6 +90,9 @@ function displayQuestion() {
     // 문제 유형이 바뀔 때마다 상태 초기화
     resetQuestionStates();
 
+    // 다음 버튼을 항상 보이도록 설정
+    nextButton.style.display = 'inline-block';
+
     const currentQuestion = filteredQuestions[currentQuestionIndex];
     questionContainer.innerHTML = '';  // 컨테이너 초기화
     resultContainer.innerHTML = '';    // 결과 컨테이너 초기화
@@ -446,7 +449,7 @@ function updateButtonStates() {
     const canProceed = (filteredQuestions[currentQuestionIndex].type === 'multiple-choice' && isMultipleChoiceAnswered) || 
                       (filteredQuestions[currentQuestionIndex].type === 'essay' && isEssayAnswerShown);
 
-    nextButton.disabled = isLastQuestion && !canProceed;
+    nextButton.disabled = !canProceed;
 }
 
 // 메시지 표시 함수
