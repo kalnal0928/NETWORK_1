@@ -488,4 +488,22 @@ function resetQuiz() {
     showSelectionScreen();
 }
 
-export default {};
+export { startQuiz };
+
+// DOM 이벤트 등록
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('start-button').addEventListener('click', () => {
+        const selectedChapter = document.getElementById('selection-chapter-filter').value;
+        const selectedType = document.getElementById('selection-type-filter').value;
+        startQuiz(selectedChapter, selectedType);
+    });
+
+    document.getElementById('prev-button').addEventListener('click', showPreviousQuestion);
+    document.getElementById('next-button').addEventListener('click', showNextQuestion);
+    document.getElementById('submit-button').addEventListener('click', handleSubmit);
+    document.getElementById('show-answer-button').addEventListener('click', showAnswer);
+    document.getElementById('reset-button').addEventListener('click', resetQuiz);
+
+    // 초기 화면
+    showSelectionScreen();
+});
