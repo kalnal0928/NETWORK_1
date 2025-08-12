@@ -176,8 +176,10 @@ const questions = [
             "VLF",
             "VHF"
         ],
-        answer: "SHF",
-        explanation: "SHF(Super High Frequency, 3~30GHz)는 초단파를 의미합니다. VLF는 초장파, LF는 장파, VHF는 단파를 의미합니다.",
+        answer: "VHF",
+        explanation: "초단파(very high frequency)는 VHF입니다.\n- VHF: Very High Frequency, 30 MHz ~ 300 MHz, 파장 약 1 m ~ 10 m\n- LF: Low Frequency, 30 kHz ~ 300 kHz, 파장 약 100 km ~ 1000 km\n- VLF: Very Low Frequency, 3 kHz ~ 30 kHz, 파장 약 10 km ~ 100 km\n- SHF: Super High Frequency, 3 GHz ~ 30 GHz, 파장 약 10 cm ~ 1 m",
+
+
         chapter: "네트워크",
         type: "multiple-choice"
     },
