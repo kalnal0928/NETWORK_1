@@ -306,7 +306,7 @@ const questions = [
         answer: "상위 계층이나 하위계층 사이에 주고받은 것을 프로토콜 데이터 단위(PDU)라고 한다.",
         explanation: "PDU는 동일 계층의 엔터티 간에 주고받는 데이터 단위입니다. 상위/하위 계층 사이에 주고받는 것은 SDU(Service Data Unit)입니다.",
         chapter: "네트워크",
-        type: "essay"
+        type: "multiple-choice"
     },
     {
         number: "23",
