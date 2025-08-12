@@ -24,7 +24,8 @@ let isAnswerSubmitted = false; // 답안 제출 상태 추가
 let isMultipleChoiceAnswered = false; // 객관식 답변 상태 추가
 let isEssayAnswerShown = false; // 서술형 정답 표시 상태 추가
 
-// Function Definitions
+// Function Definitions (모든 함수 정의는 DOMContentLoaded 이벤트 리스너보다 위에 위치해야 합니다.)
+
 // 선택 화면 표시 함수 (신규)
 function showSelectionScreen() {
     selectionContainer.style.display = 'block';
